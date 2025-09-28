@@ -697,4 +697,20 @@ A --- B --- C --- D' --- E'   (feature)
 
 ---
 
-要不要我给你画一个 **时间顺序的完整流程图**（从初始 → rebase → merge）？这样你能一步步看到演变过程，不会糊涂。
+# 解释：`git config pull.rebase true`
+
+- **作用**：把当前仓库中 `git pull` 的默认行为改为“先 `fetch`，再把本地提交 **rebase** 到上游分支之上”，而不是默认的合并（merge）。
+- **效果**：得到更线性的提交历史，避免自动生成的 “Merge branch …” 提交。
+
+## 细节
+- 未加任何范围参数时，配置写入当前仓库的 `.git/config`。
+- 等价于以后每次执行 `git pull` 都隐式加上 `--rebase`。
+- 可能在 rebase 过程中出现冲突，需要按提示解决并继续 `git rebase --continue`。
+
+## 可选值与变体
+- `git config --global pull.rebase true`：全局生效。
+- `git config pull.rebase false`：恢复为 merge。
+- `git config pull.rebase merges`：保留合并提交，执行 “rebase --rebase-merges”。
+
+## 注意
+- **Rebase 会改写提交历史**。只对尚未推送或未被他人基于的本地提交使用更安全；共享分支请先与团队约定。
