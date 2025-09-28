@@ -714,3 +714,100 @@ A --- B --- C --- D' --- E'   (feature)
 
 ## 注意
 - **Rebase 会改写提交历史**。只对尚未推送或未被他人基于的本地提交使用更安全；共享分支请先与团队约定。
+
+---
+## Q&A 总结：Git仓库初始化失败问题
+
+### **问题描述**
+用户在终端执行Git命令时遇到 `fatal: not a git repository` 错误
+
+### **错误命令**
+```bash
+git remote add origin https://github.com/nanhongchuan/Git-.git
+git branch -M main  
+git push -u origin main
+```
+
+### **错误原因**
+- 当前目录不是Git仓库
+- 缺少 `.git` 文件夹
+- 没有执行 `git init` 初始化
+
+### **解决方案**
+```bash
+# 1. 初始化Git仓库
+git init
+
+# 2. 添加远程仓库
+git remote add origin https://github.com/nanhongchuan/Git-.git
+
+# 3. 重命名分支为main
+git branch -M main  # -M: 强制重命名分支（--move的简写）
+
+# 4. 添加文件到暂存区
+git add .
+
+# 5. 提交到本地仓库
+git commit -m "Initial commit"  # -m: 指定提交信息（--message的简写）
+
+# 6. 推送到远程仓库
+git push -u origin main  # -u: 设置上游跟踪分支（--set-upstream的简写）
+```
+
+### **记忆口诀**
+"Git操作先初始化，远程分支再推送"
+
+---
+
+**适用场景**：第一次在本地目录使用Git，需要将代码推送到GitHub时
+
+---
+让我用最简单的话解释"设置上游跟踪分支"：
+
+## 什么是"上游跟踪分支"？
+
+### 简单理解：
+**上游跟踪分支**就是告诉Git："我这个本地分支对应远程的哪个分支"
+
+### 用生活例子比喻：
+- 就像给手机设置"默认联系人"
+- 设置后，你直接说"打电话给妈妈"，不用每次都输入完整号码
+- Git设置后，你直接说`git push`，不用每次都写`git push origin main`
+
+## 具体例子：
+
+### 设置前：
+```bash
+# 每次推送都要写完整命令
+git push origin main
+git pull origin main
+```
+
+### 设置后：
+```bash
+# 设置跟踪关系
+git push -u origin main
+
+# 以后就可以简化
+git push    # 自动推送到 origin/main
+git pull    # 自动从 origin/main 拉取
+```
+
+## 为什么要设置？
+
+### 好处：
+1. **简化命令**：不用每次都写`origin main`
+2. **避免错误**：不会推送到错误的分支
+3. **自动同步**：Git知道你的本地分支对应哪个远程分支
+
+### 查看跟踪关系：
+```bash
+git branch -vv
+# 输出会显示：* main 7e01864 [origin/main] Initial commit
+# 这里的 [origin/main] 就是跟踪关系
+```
+
+## 总结：
+**上游跟踪分支 = 给本地分支找个"默认的远程伙伴"**
+
+设置后，你的本地`main`分支就知道它对应远程的`origin/main`分支，以后操作就简单多了！
