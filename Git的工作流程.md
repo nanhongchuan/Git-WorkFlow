@@ -544,7 +544,7 @@ If 你有尚未提交的修改需要临时工作，下面给出一个切换处�
 
 # Git 后悔药命令（第三张图）
 
-![](imges\img_v3_02qh_94ed07cf-deef-4369-aeec-191cd257e29g.png)
+![](imges/img_v3_02qh_4a6b8138-51b5-42b7-83d2-98a0dfefb92g.jpg)
 
 | Git 操作 | Git 命令 | 使用场景 | 注意事项 |
 |---|---|---|---|
@@ -554,8 +554,61 @@ If 你有尚未提交的修改需要临时工作，下面给出一个切换处�
 | amend | `git commit --amend` | 修改最近的一次提交 | 如果 amend 已经推送到远端，需谨慎，可能引发冲突 |
 
 ---
+## Git后悔药命令对比表
 
+| 命令 | 作用 | 安全性 | 使用场景 | 示例 |
+|------|------|--------|----------|------|
+| **git reset --soft** | 重置提交历史，保留工作区和暂存区 | 🟢 安全 | 修改最近提交 | `git reset --soft HEAD~1` |
+| **git reset --mixed** | 重置提交历史和暂存区，保留工作区 | 🟡 中等 | 撤销暂存，重新选择文件 | `git reset HEAD~1` |
+| **git reset --hard** | 重置所有，包括工作区 | 🔴 危险 | 完全回到过去状态 | `git reset --hard HEAD~1` |
+| **git revert** | 创建新提交抵消指定提交 | 🟢 安全 | 撤销已推送的提交 | `git revert HEAD` |
+| **git checkout** | 恢复文件到指定状态 | 🟢 安全 | 恢复单个文件 | `git checkout HEAD -- file.txt` |
+| **git restore** | 恢复工作区/暂存区文件 | 🟢 安全 | 撤销未提交修改 | `git restore file.txt` |
+| **git stash** | 临时保存当前修改 | 🟢 安全 | 临时切换分支 | `git stash` / `git stash pop` |
+| **git commit --amend** | 修改最近提交 | 🟡 中等 | 修正提交信息或内容 | `git commit --amend -m "新信息"` |
 
+## 操作结果对比表
+
+| 操作 | 提交历史 | 暂存区 | 工作区 | 远程仓库 |
+|------|----------|--------|--------|----------|
+| **reset --soft** | ❌ 删除 | ✅ 保留 | ✅ 保留 | ❌ 不影响 |
+| **reset --mixed** | ❌ 删除 | ❌ 清空 | ✅ 保留 | ❌ 不影响 |
+| **reset --hard** | ❌ 删除 | ❌ 清空 | ❌ 清空 | ❌ 不影响 |
+| **revert** | ✅ 新增 | ✅ 保留 | ✅ 保留 | ✅ 可推送 |
+| **checkout** | ✅ 保留 | ✅ 保留 | ❌ 恢复 | ❌ 不影响 |
+| **restore** | ✅ 保留 | ✅ 保留 | ❌ 恢复 | ❌ 不影响 |
+| **stash** | ✅ 保留 | ✅ 保留 | ❌ 清空 | ❌ 不影响 |
+| **amend** | ✅ 修改 | ✅ 保留 | ✅ 保留 | ❌ 需强制推送 |
+
+## 使用场景推荐表
+
+| 场景 | 推荐命令 | 原因 |
+|------|----------|------|
+| **撤销未提交修改** | `git restore .` | 安全，只恢复文件 |
+| **撤销已暂存修改** | `git restore --staged .` | 安全，只清空暂存区 |
+| **修改最近提交信息** | `git commit --amend` | 简单，直接修改 |
+| **撤销最近提交（保留修改）** | `git reset --soft HEAD~1` | 安全，保留所有修改 |
+| **撤销最近提交（丢弃修改）** | `git reset --hard HEAD~1` | 危险，但彻底 |
+| **撤销已推送的提交** | `git revert HEAD` | 安全，不破坏历史 |
+| **临时保存修改** | `git stash` | 安全，可恢复 |
+| **恢复单个文件** | `git checkout HEAD -- file.txt` | 安全，精确恢复 |
+
+## 危险等级表
+
+| 危险等级 | 命令 | 后果 |
+|----------|------|------|
+| 🔴 **极高危险** | `git reset --hard` | 永久丢失所有未提交修改 |
+| 🔴 **极高危险** | `git push --force` | 覆盖远程历史，影响他人 |
+| 🟡 **中等危险** | `git reset --mixed` | 丢失暂存区修改 |
+| 🟡 **中等危险** | `git commit --amend` | 修改已推送提交需强制推送 |
+| 🟢 **安全** | `git revert` | 创建新提交，不破坏历史 |
+| 🟢 **安全** | `git restore` | 只恢复文件，不影响提交 |
+| 🟢 **安全** | `git stash` | 临时保存，可随时恢复 |
+
+**记忆口诀**：
+- 🟢 绿色 = 安全操作
+- 🟡 黄色 = 需要小心
+- 🔴 红色 = 危险操作，会丢失数据
 # Git 合并相关知识点对照表
 
 ![](imges\1998b24c7cac2.png)
@@ -811,3 +864,128 @@ git branch -vv
 **上游跟踪分支 = 给本地分支找个"默认的远程伙伴"**
 
 设置后，你的本地`main`分支就知道它对应远程的`origin/main`分支，以后操作就简单多了！
+
+---
+
+让我详细解释Git中删除、移动、重命名文件的操作：
+
+## 1. 删除文件
+
+### 方法一：使用 `git rm`（推荐）
+```bash
+# 删除单个文件
+git rm filename.txt
+
+# 删除多个文件
+git rm file1.txt file2.txt
+
+# 删除整个目录
+git rm -r directory/
+
+# 删除文件但保留在工作区（不删除实际文件）
+git rm --cached filename.txt
+```
+
+### 方法二：先删除文件，再添加
+```bash
+# 1. 手动删除文件
+rm filename.txt
+
+# 2. 告诉Git文件已删除
+git add filename.txt
+# 或者
+git rm filename.txt
+```
+
+## 2. 移动文件
+
+### 使用 `git mv`（推荐）
+```bash
+# 移动文件到新位置
+git mv oldfile.txt newfolder/oldfile.txt
+
+# 移动并重命名
+git mv oldfile.txt newfolder/newfile.txt
+```
+
+### 手动移动（两步操作）
+```bash
+# 1. 移动文件
+mv oldfile.txt newfolder/oldfile.txt
+
+# 2. 告诉Git文件已移动
+git add newfolder/oldfile.txt
+git rm oldfile.txt
+```
+
+## 3. 重命名文件
+
+### 使用 `git mv`（推荐）
+```bash
+# 重命名文件
+git mv oldname.txt newname.txt
+
+# 重命名并移动
+git mv oldname.txt newfolder/newname.txt
+```
+
+### 手动重命名（两步操作）
+```bash
+# 1. 重命名文件
+mv oldname.txt newname.txt
+
+# 2. 告诉Git文件已重命名
+git add newname.txt
+git rm oldname.txt
+```
+
+## 4. 查看文件状态
+
+```bash
+# 查看所有变更
+git status
+
+# 查看具体变更内容
+git diff
+
+# 查看已暂存的变更
+git diff --cached
+```
+
+## 5. 完整示例
+
+```bash
+# 删除文件
+git rm unwanted.txt
+git commit -m "删除不需要的文件"
+
+# 重命名文件
+git mv oldname.txt newname.txt
+git commit -m "重命名文件"
+
+# 移动文件
+git mv file.txt docs/file.txt
+git commit -m "移动文件到docs目录"
+```
+
+## 6. 撤销操作
+
+```bash
+# 撤销删除（恢复文件）
+git checkout HEAD -- filename.txt
+
+# 撤销重命名
+git mv newname.txt oldname.txt
+
+# 撤销移动
+git mv newfolder/file.txt file.txt
+```
+
+## 重要提示：
+
+1. **使用 `git mv` 和 `git rm`**：Git会自动处理删除和移动操作
+2. **提交变更**：所有操作都需要 `git commit` 才能保存
+3. **查看状态**：操作前后用 `git status` 检查状态
+4. **撤销操作**：可以用 `git checkout` 恢复文件
+
+**记忆口诀**：删除用`rm`，移动用`mv`，操作后要`commit`！
