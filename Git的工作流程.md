@@ -1,3 +1,374 @@
+# 【第一张图】Git 分区概念Markdown All in One
+
+![](imges\img_v3_02qh_94ed07cf-deef-4369-aeec-191cd257e29g.png)
+
+- **工作区 Working Directory（工作区）**
+  - 本地文件的当前状态所在目录。
+- **暂存区 Staging/Index（暂存区）**
+  - 待提交的快照。通过 `git add` 将修改放入暂存区。
+- **本地仓库 Local Repository（本地仓库）**
+  - 使用 `git commit` 将暂存区的内容写入本地仓库的历史记录。
+- **远程仓库 Remote Repository（远程仓库）**
+  - 位于服务器上的中央仓库。通过 `git push` 将本地提交推送到远程；通过 `git fetch`/`git pull` 获取远程变更。
+- **核心工作流（常用操作）**
+  - `git add`：将工作区修改添加到暂存区
+  - `git commit`：将暂存区的改动提交到本地仓库
+  - `git push`：把本地仓库的提交推送到远程
+  - `git pull` / `git fetch`：从远程获取更新到本地
+  - `git merge`：将同分支上的改动合并
+- **注释**：不同颜色线条示意不同阶段的流动（工作区 <- 暂存区 <- 本地仓库 <- 远程仓库）
+
+---
+
+# 【第二张图】变更分支与冲突处理
+
+![](imges\img_v3_02qh_40fe8878-c57f-4b99-8653-f8a0d3103f5g.png)
+
+If 你有尚未提交的修改需要临时工作，下面给出一个切换处理的思路：
+
+- **操作方法 vs Git 命令 vs 效果**
+
+| 操作方法 | Git 命令 | 效果 |
+|---|---|---|
+| commit | `git add .`  `git commit -m "commit message"` | 将工作区改动提交到本地分支 |
+| stash | `git stash` | 将修改存储起来，清理工作区以便切换分支；后续再恢复 |
+| discard | `git reset --hard` | 拋弃工作区与暂存区的改动，回到最近一次提交的状态 |
+| switch | `git switch <branch_name>` | 直接切换分支，若本地改动会带到新分支上（按配置） |
+
+---
+
+# 具体操作要点
+
+- 当你有未提交的修改，需要临时切换分支时：
+  - 使用 `git stash` 将当前修改“存起来”，再切换分支处理紧急任务，完成后用 `git stash pop` 恢复。
+  - 若你决定放弃当前修改，使用 `git reset --hard` 清理工作区与暂存区的改动。
+  - 直接 `git switch <branch_name>` 切换分支时，若有未提交改动会被保留到新分支（视仓库设置而定），因此先确认是否需要 stash。
+- 提交前务必检查：
+  - 使用 `git status` 查看当前状态
+  - 使用 `git diff` 查看未暂存改动，`git diff --staged` 查看已暂存改动
+  - 提交信息要明确、描述清晰
+
+---
+
+# 【第三张图】Git 后悔药命
+
+## Git后悔药命令 - 完整版（含示例）
+![](imges/img_v3_02qh_4a6b8138-51b5-42b7-83d2-98a0dfefb92g.jpg)
+
+| 命令 | 作用 | 安全吗？ | 示例代码 |
+|------|------|----------|----------|
+| `git restore .` | 撤销所有未保存的修改 | ✅ 安全 | `git restore .` |
+| `git restore --staged .` | 撤销已暂存的修改 | ✅ 安全 | `git restore --staged .` |
+| `git reset --soft HEAD~1` | 撤销提交，保留修改和暂存 | ✅ 安全 | `git reset --soft HEAD~1` |
+| `git reset --mixed HEAD~1` | 撤销提交和暂存，保留修改 | ⚠️ 小心 | `git reset --mixed HEAD~1` |
+| `git reset --hard HEAD~1` | 撤销提交和修改，全部删除 | ❌ 危险 | `git reset --hard HEAD~1` |
+| `git revert HEAD` | 创建新提交来撤销最近提交 | ✅ 安全 | `git revert HEAD` |
+| `git stash` | 临时保存修改 | ✅ 安全 | `git stash` |
+| `git stash pop` | 恢复临时保存的修改 | ✅ 安全 | `git stash pop` |
+| `git commit --amend` | 修改最近一次提交 | ⚠️ 小心 | `git commit --amend -m "新信息"` |
+| `git checkout HEAD -- file.txt` | 恢复单个文件 | ✅ 安全 | `git checkout HEAD -- readme.md` |
+
+## reset三种模式对比（含示例）
+
+| 模式 | 提交历史 | 暂存区 | 工作区 | 示例代码 |
+|------|----------|--------|--------|----------|
+| `--soft` | ❌ 删除 | ✅ 保留 | ✅ 保留 | `git reset --soft HEAD~1` |
+| `--mixed` | ❌ 删除 | ❌ 清空 | ✅ 保留 | `git reset --mixed HEAD~1` |
+| `--hard` | ❌ 删除 | ❌ 清空 | ❌ 清空 | `git reset --hard HEAD~1` |
+
+好，那我给你加上 **影响范围** 一列，完整对比如下：
+
+---
+
+### `restore` / `reset` / `revert` 差异表
+
+| 命令              | 作用对象         | 是否改历史     | 影响范围（工作区 / 暂存区 / 历史）           | 常用场景              | 示例                                                        |
+| --------------- | ------------ | --------- | ------------------------------ | ----------------- | --------------------------------------------------------- |
+| **git restore** | 工作区 / 暂存区的文件 | 不改历史    | ✅ 工作区<br>✅ 暂存区<br>❌ 历史         | 丢弃修改、恢复文件到某个提交    | `git restore file.txt`<br>`git restore --staged file.txt` |
+| **git reset**   | 分支指针、暂存区、工作区 | 改历史（危险） | ✅ 工作区（可选）<br>✅ 暂存区<br>✅ 历史     | 回到某个提交，清理提交/暂存/修改 | `git reset --hard HEAD~1`<br>`git reset --soft HEAD~1`    |
+| **git revert**  | 提交历史（生成新提交）  | 保留历史    | ❌ 工作区<br>❌ 暂存区<br>✅ 历史（新增一个提交） | 撤销某个提交，适合多人协作     | `git revert HEAD`<br>`git revert <commit>`                |
+
+---
+
+🧩 **一图理解**：
+
+* `restore` → 文件层面（局部修复）
+* `reset` → 历史层面（指针回退，危险）
+* `revert` → 历史层面（新提交抵消旧提交，安全）
+
+
+## 常用场景速查（含示例）
+
+| 我想... | 用什么命令 | 示例 |
+|---------|------------|------|
+| 撤销刚才写的代码 | `git restore .` | `git restore .` |
+| 撤销已add的文件 | `git restore --staged .` | `git restore --staged .` |
+| 修改提交信息 | `git reset --soft HEAD~1` | `git reset --soft HEAD~1` |
+| 重新选择要提交的文件 | `git reset --mixed HEAD~1` | `git reset --mixed HEAD~1` |
+| 完全删除刚才的提交 | `git reset --hard HEAD~1` | `git reset --hard HEAD~1` |
+| 撤销已推送的提交 | `git revert HEAD` | `git revert HEAD` |
+| 临时保存去干别的事 | `git stash` | `git stash` |
+| 回来继续刚才的工作 | `git stash pop` | `git stash pop` |
+| 修改提交信息 | `git commit --amend` | `git commit --amend -m "修正提交信息"` |
+| 只恢复某个文件 | `git checkout HEAD -- file.txt` | `git checkout HEAD -- readme.md` |
+
+## 完整操作示例
+
+### 场景1：写错代码想重来
+```bash
+# 查看状态
+git status
+
+# 撤销所有修改
+git restore .
+
+# 重新开始
+# 编辑文件...
+git add .
+git commit -m "重新提交"
+```
+
+### 场景2：add了文件但不想提交
+```bash
+# 撤销暂存
+git restore --staged .
+
+# 重新选择文件
+git add file1.txt
+git commit -m "只提交file1.txt"
+```
+
+### 场景3：提交信息写错了
+```bash
+# 撤销提交但保留修改
+git reset --soft HEAD~1
+
+# 重新提交
+git commit -m "正确的提交信息"
+```
+
+### 场景4：临时切换分支
+```bash
+# 保存当前修改
+git stash
+
+# 切换分支
+git checkout other-branch
+
+# 切换回来
+git checkout main
+
+# 恢复修改
+git stash pop
+```
+
+### 场景5：修改最近提交
+```bash
+# 修改文件
+# 编辑文件...
+
+# 添加到暂存区
+git add .
+
+# 修改最近提交
+git commit --amend -m "修正后的提交信息"
+```
+
+## 记住5个最重要的（含示例）
+
+1. **`git restore .`** - 撤销修改（最常用）
+   ```bash
+   git restore .
+   ```
+
+2. **`git restore --staged .`** - 撤销暂存（常用）
+   ```bash
+   git restore --staged .
+   ```
+
+3. **`git stash`** - 临时保存（最安全）
+   ```bash
+   git stash
+   git stash pop
+   ```
+
+4. **`git reset --soft`** - 修改提交（安全）
+   ```bash
+   git reset --soft HEAD~1
+   ```
+
+5. **`git reset --hard`** - 彻底删除（最危险）
+   ```bash
+   git reset --hard HEAD~1
+   ```
+
+**简单记忆**：
+- 想撤销修改 → `git restore .`
+- 想撤销暂存 → `git restore --staged .`
+- 想保存 → `git stash` 
+- 想修改提交 → `git reset --soft HEAD~1`
+- 想删除 → `git reset --hard HEAD~1`（小心！）
+
+# 【第四张图】Git 合并相关知识点对照表
+
+![](imges\1998b24c7cac2.png)
+
+1) 知识点总结（Markdown 表格）
+
+| 操作 | 特点 | 优点 | 缺点 | 应用场景与注意点 |
+|---|---|---|---|---|
+| **rebase（变基）** | 只保留线性提交，当前分支在目标分支之上重新应用 | - 历史线性、易读性高 | - 需要强推，修改公开历史时可能影响他人 | 私有分支整理提交历史，和主分支对齐后再合并；在发布前保持历史整洁 |
+| **merge（合并）** | 会出现所有提交记录，包括 merge 提交 | - 可溯源，保留并行开发历史 | - 可能产生多条 merge 提交，历史不完全线性 | 公共分支合并，保留完整历史，方便追溯冲突来源 |
+| **squash merge（压缩合并）** | 只出现一条 merge 记录，合并提交被压缩 | - 历史清爽，便于理解 | - 中间提交细节会丢失 | 需要合并成单条提交、历史尽量简洁时使用；不适合需要逐条追踪的场景 |
+
+
+
+2) 表格信息提取（原表内容）
+
+- 操作：rebase
+  - 特点：只有线性提交记录
+  - 优点：减少一次 merge 记录
+  - 缺点：必须使用强推
+  - 应用场景：在私有分支上可以用 rebase
+
+- 操作：merge
+  - 特点：会出现所有提交记录，包括 merge 记录
+  - 优点：保证分支可溯源
+  - 缺点：多次 merge 记录
+  - 应用场景：多人协作分支，主干合并时需要保留并行开发历史
+
+- 操作：squash merge
+  - 特点：只出现一条 merge 记录
+  - 优点：历史记录更加清爽干净
+  - 缺点：历史记录被合并并省略中间提交
+  - 应用场景：将某个特征分支合并到主分支时，保持主干历史简洁
+
+
+
+---
+#  Rebase 的含义
+
+# 1. 先搞清楚 Rebase 的定义
+
+**Rebase X onto Y**
+👉 把 **分支 X 的提交**，移到 **分支 Y 的最后**，就好像 X 是在 Y 的基础上开发的一样。
+
+所以：
+
+* **Rebase main onto feature** → 把 main 的提交移到 feature 后面。
+* **Rebase feature onto main** → 把 feature 的提交移到 main 后面。
+
+---
+
+# 2. 初始情况
+
+假设我们仓库有以下分支：
+
+```
+A --- B --- C   (main)
+       \
+        D --- E   (feature)
+```
+
+* `A-B-C`：main 分支的历史。
+* `D-E`：你在 feature 分支上的新改动。
+
+---
+
+# 3. 情况一：Rebase **main onto feature**
+
+操作：
+
+```
+git checkout main
+git rebase feature
+```
+
+过程：
+
+* Git 会把 `C` 拿下来，放到 `E` 后面。
+
+结果：
+
+```
+A --- B --- D --- E --- C'   (main)
+        \
+         D --- E             (feature，没变)
+```
+
+* `main` 分支现在包含了 feature 的改动。
+* 注意 `C` 变成了新的 `C'`（hash 变了）。
+
+---
+
+# 4. 情况二：Rebase **feature onto main**
+
+操作：
+
+```
+git checkout feature
+git rebase main
+```
+
+过程：
+
+* Git 会把 `D-E` 拿下来，放到 `C` 后面。
+
+结果：
+
+```
+A --- B --- C --- D' --- E'   (feature)
+              \
+               C              (main，没变)
+```
+
+* `feature` 分支现在包含了 main 的改动。
+* 注意 `D-E` 变成了新的 `D'-E'`（hash 变了）。
+
+---
+
+# 5. 合并之后的区别
+
+* **情况一**（main onto feature）：
+
+  * `main` 已经包含了 feature 的改动。
+  * 如果再把 feature 合并到 main → **Fast-forward 合并**，最后只有一条直线。
+
+* **情况二**（feature onto main）：
+
+  * `feature` 已经包含了 main 的改动。
+  * 如果再把 feature 合并到 main → 会产生一个 **merge commit**，历史保留分叉记录。
+
+---
+
+# 6. 总结对比
+
+| 情况 | 命令                                         | 最终谁吸收了谁             | 合并后的结果                           |
+| -- | ------------------------------------------ | ------------------- | -------------------------------- |
+| 1  | `git checkout main` → `git rebase feature` | **main 吸收 feature** | main 像直线一样，干净（Fast-forward）      |
+| 2  | `git checkout feature` → `git rebase main` | **feature 吸收 main** | 合并回 main 时会产生 merge commit，历史更复杂 |
+
+---
+
+# 解释：`git config pull.rebase true`
+
+- **作用**：把当前仓库中 `git pull` 的默认行为改为“先 `fetch`，再把本地提交 **rebase** 到上游分支之上”，而不是默认的合并（merge）。
+- **效果**：得到更线性的提交历史，避免自动生成的 “Merge branch …” 提交。
+
+## 细节
+- 未加任何范围参数时，配置写入当前仓库的 `.git/config`。
+- 等价于以后每次执行 `git pull` 都隐式加上 `--rebase`。
+- 可能在 rebase 过程中出现冲突，需要按提示解决并继续 `git rebase --continue`。
+
+## 可选值与变体
+- `git config --global pull.rebase true`：全局生效。
+- `git config pull.rebase false`：恢复为 merge。
+- `git config pull.rebase merges`：保留合并提交，执行 “rebase --rebase-merges”。
+
+## 注意
+- **Rebase 会改写提交历史**。只对尚未推送或未被他人基于的本地提交使用更安全；共享分支请先与团队约定。
+
+
 # Git的工作流程
 
 通常是：工作区 → 暂存区 → 本地仓库 → 远程仓库。让我为你详细说明：
@@ -399,285 +770,6 @@ git push origin main
 * 多个文件有冲突，就在 `git add` 后面列出多个文件名。
 * 如果懒得一个一个写，可以用 `git add .`（表示所有已修改的文件全部添加）。
 
-
-
-
-# 【第一张图】Git 分区概念Markdown All in One
-
-![](imges\img_v3_02qh_94ed07cf-deef-4369-aeec-191cd257e29g.png)
-
-- **工作区 Working Directory（工作区）**
-  - 本地文件的当前状态所在目录。
-- **暂存区 Staging/Index（暂存区）**
-  - 待提交的快照。通过 `git add` 将修改放入暂存区。
-- **本地仓库 Local Repository（本地仓库）**
-  - 使用 `git commit` 将暂存区的内容写入本地仓库的历史记录。
-- **远程仓库 Remote Repository（远程仓库）**
-  - 位于服务器上的中央仓库。通过 `git push` 将本地提交推送到远程；通过 `git fetch`/`git pull` 获取远程变更。
-- **核心工作流（常用操作）**
-  - `git add`：将工作区修改添加到暂存区
-  - `git commit`：将暂存区的改动提交到本地仓库
-  - `git push`：把本地仓库的提交推送到远程
-  - `git pull` / `git fetch`：从远程获取更新到本地
-  - `git merge`：将同分支上的改动合并
-- **注释**：不同颜色线条示意不同阶段的流动（工作区 <- 暂存区 <- 本地仓库 <- 远程仓库）
-
----
-
-# 【第二张图】变更分支与冲突处理
-
-![](imges\img_v3_02qh_40fe8878-c57f-4b99-8653-f8a0d3103f5g.png)
-
-If 你有尚未提交的修改需要临时工作，下面给出一个切换处理的思路：
-
-- **操作方法 vs Git 命令 vs 效果**
-
-| 操作方法 | Git 命令 | 效果 |
-|---|---|---|
-| commit | `git add .`  `git commit -m "commit message"` | 将工作区改动提交到本地分支 |
-| stash | `git stash` | 将修改存储起来，清理工作区以便切换分支；后续再恢复 |
-| discard | `git reset --hard` | 拋弃工作区与暂存区的改动，回到最近一次提交的状态 |
-| switch | `git switch <branch_name>` | 直接切换分支，若本地改动会带到新分支上（按配置） |
-
----
-
-# 具体操作要点
-
-- 当你有未提交的修改，需要临时切换分支时：
-  - 使用 `git stash` 将当前修改“存起来”，再切换分支处理紧急任务，完成后用 `git stash pop` 恢复。
-  - 若你决定放弃当前修改，使用 `git reset --hard` 清理工作区与暂存区的改动。
-  - 直接 `git switch <branch_name>` 切换分支时，若有未提交改动会被保留到新分支（视仓库设置而定），因此先确认是否需要 stash。
-- 提交前务必检查：
-  - 使用 `git status` 查看当前状态
-  - 使用 `git diff` 查看未暂存改动，`git diff --staged` 查看已暂存改动
-  - 提交信息要明确、描述清晰
-
----
-
-# 【第三张图】Git 后悔药命令
-
-| Git 操作 | Git 命令 | 使用场景 | 注意事项 |
-|---|---|---|---|
-| discard | `git restore <文件名>`（单个文件） / `git reset --hard`（所有文件） | 放弃工作区对文件的修改 | 不能撤回的修改将丢失，请确认再执行 |
-| reset | `git reset <commit ID>` | 还原到某个提交的状态，撤销之后的提交 | 可能导致工作树与提交状态不同步，谨慎使用 |
-| revert | `git revert <commit ID>` | 使用一个新提交抵消某次 commit 的修改 | 会产生新的提交，保留历史记录 |
-| amend | `git commit --amend` | 修改最近的一次提交 | 如果 amend 已经推送到远端，需谨慎，可能引发冲突 |
-
----
-## Git后悔药命令对比表
-
-| 命令 | 作用 | 安全性 | 使用场景 | 示例 |
-|------|------|--------|----------|------|
-| **git reset --soft** | 重置提交历史，保留工作区和暂存区 | 🟢 安全 | 修改最近提交 | `git reset --soft HEAD~1` |
-| **git reset --mixed** | 重置提交历史和暂存区，保留工作区 | 🟡 中等 | 撤销暂存，重新选择文件 | `git reset HEAD~1` |
-| **git reset --hard** | 重置所有，包括工作区 | 🔴 危险 | 完全回到过去状态 | `git reset --hard HEAD~1` |
-| **git revert** | 创建新提交抵消指定提交 | 🟢 安全 | 撤销已推送的提交 | `git revert HEAD` |
-| **git checkout** | 恢复文件到指定状态 | 🟢 安全 | 恢复单个文件 | `git checkout HEAD -- file.txt` |
-| **git restore** | 恢复工作区/暂存区文件 | 🟢 安全 | 撤销未提交修改 | `git restore file.txt` |
-| **git stash** | 临时保存当前修改 | 🟢 安全 | 临时切换分支 | `git stash` / `git stash pop` |
-| **git commit --amend** | 修改最近提交 | 🟡 中等 | 修正提交信息或内容 | `git commit --amend -m "新信息"` |
-
-## 操作结果对比表
-
-| 操作 | 提交历史 | 暂存区 | 工作区 | 远程仓库 |
-|------|----------|--------|--------|----------|
-| **reset --soft** | ❌ 删除 | ✅ 保留 | ✅ 保留 | ❌ 不影响 |
-| **reset --mixed** | ❌ 删除 | ❌ 清空 | ✅ 保留 | ❌ 不影响 |
-| **reset --hard** | ❌ 删除 | ❌ 清空 | ❌ 清空 | ❌ 不影响 |
-| **revert** | ✅ 新增 | ✅ 保留 | ✅ 保留 | ✅ 可推送 |
-| **checkout** | ✅ 保留 | ✅ 保留 | ❌ 恢复 | ❌ 不影响 |
-| **restore** | ✅ 保留 | ✅ 保留 | ❌ 恢复 | ❌ 不影响 |
-| **stash** | ✅ 保留 | ✅ 保留 | ❌ 清空 | ❌ 不影响 |
-| **amend** | ✅ 修改 | ✅ 保留 | ✅ 保留 | ❌ 需强制推送 |
-
-## 使用场景推荐表
-
-| 场景 | 推荐命令 | 原因 |
-|------|----------|------|
-| **撤销未提交修改** | `git restore .` | 安全，只恢复文件 |
-| **撤销已暂存修改** | `git restore --staged .` | 安全，只清空暂存区 |
-| **修改最近提交信息** | `git commit --amend` | 简单，直接修改 |
-| **撤销最近提交（保留修改）** | `git reset --soft HEAD~1` | 安全，保留所有修改 |
-| **撤销最近提交（丢弃修改）** | `git reset --hard HEAD~1` | 危险，但彻底 |
-| **撤销已推送的提交** | `git revert HEAD` | 安全，不破坏历史 |
-| **临时保存修改** | `git stash` | 安全，可恢复 |
-| **恢复单个文件** | `git checkout HEAD -- file.txt` | 安全，精确恢复 |
-
-## 危险等级表
-
-| 危险等级 | 命令 | 后果 |
-|----------|------|------|
-| 🔴 **极高危险** | `git reset --hard` | 永久丢失所有未提交修改 |
-| 🔴 **极高危险** | `git push --force` | 覆盖远程历史，影响他人 |
-| 🟡 **中等危险** | `git reset --mixed` | 丢失暂存区修改 |
-| 🟡 **中等危险** | `git commit --amend` | 修改已推送提交需强制推送 |
-| 🟢 **安全** | `git revert` | 创建新提交，不破坏历史 |
-| 🟢 **安全** | `git restore` | 只恢复文件，不影响提交 |
-| 🟢 **安全** | `git stash` | 临时保存，可随时恢复 |
-
-**记忆口诀**：
-- 🟢 绿色 = 安全操作
-- 🟡 黄色 = 需要小心
-- 🔴 红色 = 危险操作，会丢失数据
-
-# 【第四张图】Git 合并相关知识点对照表
-
-![](imges\1998b24c7cac2.png)
-
-1) 知识点总结（Markdown 表格）
-
-| 操作 | 特点 | 优点 | 缺点 | 应用场景与注意点 |
-|---|---|---|---|---|
-| **rebase（变基）** | 只保留线性提交，当前分支在目标分支之上重新应用 | - 历史线性、易读性高 | - 需要强推，修改公开历史时可能影响他人 | 私有分支整理提交历史，和主分支对齐后再合并；在发布前保持历史整洁 |
-| **merge（合并）** | 会出现所有提交记录，包括 merge 提交 | - 可溯源，保留并行开发历史 | - 可能产生多条 merge 提交，历史不完全线性 | 公共分支合并，保留完整历史，方便追溯冲突来源 |
-| **squash merge（压缩合并）** | 只出现一条 merge 记录，合并提交被压缩 | - 历史清爽，便于理解 | - 中间提交细节会丢失 | 需要合并成单条提交、历史尽量简洁时使用；不适合需要逐条追踪的场景 |
-
-
-
-2) 表格信息提取（原表内容）
-
-- 操作：reb ase
-  - 特点：只有线性提交记录
-  - 优点：减少一次 merge 记录
-  - 缺点：必须使用强推
-  - 应用场景：在私有分支上可以用 rebase
-
-- 操作：merge
-  - 特点：会出现所有提交记录，包括 merge 记录
-  - 优点：保证分支可溯源
-  - 缺点：多次 merge 记录
-  - 应用场景：多人协作分支，主干合并时需要保留并行开发历史
-
-- 操作：squash merge
-  - 特点：只出现一条 merge 记录
-  - 优点：历史记录更加清爽干净
-  - 缺点：历史记录被合并并省略中间提交
-  - 应用场景：将某个特征分支合并到主分支时，保持主干历史简洁
-
-
-
----
-#  Rebase 的含义
-
-# 1. 先搞清楚 Rebase 的定义
-
-**Rebase X onto Y**
-👉 把 **分支 X 的提交**，移到 **分支 Y 的最后**，就好像 X 是在 Y 的基础上开发的一样。
-
-所以：
-
-* **Rebase main onto feature** → 把 main 的提交移到 feature 后面。
-* **Rebase feature onto main** → 把 feature 的提交移到 main 后面。
-
----
-
-# 2. 初始情况
-
-假设我们仓库有以下分支：
-
-```
-A --- B --- C   (main)
-       \
-        D --- E   (feature)
-```
-
-* `A-B-C`：main 分支的历史。
-* `D-E`：你在 feature 分支上的新改动。
-
----
-
-# 3. 情况一：Rebase **main onto feature**
-
-操作：
-
-```
-git checkout main
-git rebase feature
-```
-
-过程：
-
-* Git 会把 `C` 拿下来，放到 `E` 后面。
-
-结果：
-
-```
-A --- B --- D --- E --- C'   (main)
-        \
-         D --- E             (feature，没变)
-```
-
-* `main` 分支现在包含了 feature 的改动。
-* 注意 `C` 变成了新的 `C'`（hash 变了）。
-
----
-
-# 4. 情况二：Rebase **feature onto main**
-
-操作：
-
-```
-git checkout feature
-git rebase main
-```
-
-过程：
-
-* Git 会把 `D-E` 拿下来，放到 `C` 后面。
-
-结果：
-
-```
-A --- B --- C --- D' --- E'   (feature)
-              \
-               C              (main，没变)
-```
-
-* `feature` 分支现在包含了 main 的改动。
-* 注意 `D-E` 变成了新的 `D'-E'`（hash 变了）。
-
----
-
-# 5. 合并之后的区别
-
-* **情况一**（main onto feature）：
-
-  * `main` 已经包含了 feature 的改动。
-  * 如果再把 feature 合并到 main → **Fast-forward 合并**，最后只有一条直线。
-
-* **情况二**（feature onto main）：
-
-  * `feature` 已经包含了 main 的改动。
-  * 如果再把 feature 合并到 main → 会产生一个 **merge commit**，历史保留分叉记录。
-
----
-
-# 6. 总结对比
-
-| 情况 | 命令                                         | 最终谁吸收了谁             | 合并后的结果                           |
-| -- | ------------------------------------------ | ------------------- | -------------------------------- |
-| 1  | `git checkout main` → `git rebase feature` | **main 吸收 feature** | main 像直线一样，干净（Fast-forward）      |
-| 2  | `git checkout feature` → `git rebase main` | **feature 吸收 main** | 合并回 main 时会产生 merge commit，历史更复杂 |
-
----
-
-# 解释：`git config pull.rebase true`
-
-- **作用**：把当前仓库中 `git pull` 的默认行为改为“先 `fetch`，再把本地提交 **rebase** 到上游分支之上”，而不是默认的合并（merge）。
-- **效果**：得到更线性的提交历史，避免自动生成的 “Merge branch …” 提交。
-
-## 细节
-- 未加任何范围参数时，配置写入当前仓库的 `.git/config`。
-- 等价于以后每次执行 `git pull` 都隐式加上 `--rebase`。
-- 可能在 rebase 过程中出现冲突，需要按提示解决并继续 `git rebase --continue`。
-
-## 可选值与变体
-- `git config --global pull.rebase true`：全局生效。
-- `git config pull.rebase false`：恢复为 merge。
-- `git config pull.rebase merges`：保留合并提交，执行 “rebase --rebase-merges”。
-
-## 注意
-- **Rebase 会改写提交历史**。只对尚未推送或未被他人基于的本地提交使用更安全；共享分支请先与团队约定。
 
 ---
 ## Q&A 总结：Git仓库初始化失败问题
