@@ -83,9 +83,14 @@ git fetch
 git checkout <remote-branch-name>   # 若远端存在，会自动创建本地并关联
 # 或显式
 git checkout -t origin/<branch-name>
+
+# 或使用
+git switch <remote-branch-name>   # Git 2.23 后推荐用这个替代 checkout 的分支切换功能
 ```
 
 > `git fetch` 只同步引用，不会自动合并。&#x20;
+
+> 都是把当前工作区切换到 main 分支。
 
 ---
 
