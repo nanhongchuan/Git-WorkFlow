@@ -50,7 +50,8 @@
   ```bash
   git restore --staged <file>
   ```
-* **丢弃工作区修改**
+* **把本地仓库的最新提交，恢复到工作区，丢弃工作区修改**
+（HEAD 就是本地仓库的最新提交）
 
   ```bash
   git restore <file>
@@ -117,7 +118,7 @@ git config --global pull.rebase true
 
 ### 1）Discard（丢弃修改，也叫rollback）
 
-* 单个文件：
+* 单个文件（**把本地仓库的最新提交，恢复到工作区，丢弃工作区修改**）：
 
   ```bash
   git restore <file>
