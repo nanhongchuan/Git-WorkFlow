@@ -84,9 +84,9 @@
 
 ### 方法一：reset + 重做
 
-1. 找到要保留的那个提交 ID。
+1. `git log`找到要保留的那个提交 ID。
 2. `git reset --mixed <commit-id>`
-   → 撤销后续提交，改动保留在工作区。
+   → 撤销后续提交，之前提交的改动保留在工作区。
 3. `git add . && git commit -m "合并提交说明"`
    → 将多个提交重新压缩成一次提交。
 4. 如果远端已有历史，需 `git push -f`。
@@ -101,6 +101,8 @@
    * `reword`：修改提交信息。
    * `squash`：合并进上一个提交。
    * 其他选项：`edit`、`drop`、`reset`、`merge`。
+   * 点击`i`键进入到编辑模式
+   ![](imges/image.png)
 3. 至少保留一个 `pick`，其他可以 `squash`。
 4. 保存退出后，完成 rebase。
 5. 推送：
