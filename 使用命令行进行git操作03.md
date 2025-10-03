@@ -59,7 +59,7 @@
   * `git stash`：保存暂存区改动。
   * `git stash -a`：保存 **工作区+暂存区** 的所有改动。
   * `git stash list`：查看保存的列表。
-  * `git stash apply stash@{0}`：取出指定 stash（不删除）。
+  * `git stash apply stash@{0}`：取出指定 stash（不删除，windows系统里要加单引号，因为在powershell里花括号是一个特殊的语法）。
   * `git stash drop stash@{0}`：删除指定 stash。
   * `git stash pop stash@{0}`：取出并删除。
 
