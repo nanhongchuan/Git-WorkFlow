@@ -175,3 +175,124 @@ git config user.email "alice.open@gmail.com"
 * 但在 **A 项目** 或别的仓库中，仍然使用全局配置的公司邮箱。
 
 ---
+
+# Git .gitignore 和 nano 编辑器知识点总结
+
+## 1）.gitignore 文件管理
+
+### 什么是 .gitignore
+`.gitignore` 文件用于告诉 Git 忽略哪些文件和文件夹，防止它们被意外提交到版本控制中。
+
+### 创建和编辑 .gitignore
+```bash
+# 创建 .gitignore 文件
+touch .gitignore
+
+# 编辑 .gitignore 文件
+nano .gitignore
+```
+
+### 常用忽略规则
+```bash
+# macOS系统文件
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+
+# Windows系统文件
+ehthumbs.db
+Thumbs.db
+
+# IDE文件
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# 临时文件
+*.tmp
+*.log
+```
+
+### 处理已被跟踪的文件
+如果文件已经被 Git 跟踪，需要先从 Git 中移除：
+```bash
+# 从Git中移除但保留本地文件
+git rm --cached .DS_Store
+
+# 移除所有.DS_Store文件
+git rm --cached -r .DS_Store
+```
+
+### 提交 .gitignore 更改
+```bash
+git add .gitignore
+git commit -m "Add .gitignore to exclude system files"
+git push origin main
+```
+
+---
+
+## 2）nano 编辑器使用
+
+### 打开文件
+```bash
+nano filename.txt
+```
+
+### 基本操作
+- **保存文件**：`Ctrl + O`
+- **退出编辑器**：`Ctrl + X`
+- **搜索文本**：`Ctrl + W`
+- **显示帮助**：`Ctrl + G`
+
+### 退出流程
+1. **保存并退出**：
+   - 按 `Ctrl + X`
+   - 按 `Y` 确认保存
+   - 按 `Enter` 确认文件名
+
+2. **不保存直接退出**：
+   - 按 `Ctrl + X`
+   - 按 `N` 不保存
+   - 按 `Enter` 确认
+
+### 其他有用快捷键
+- `Ctrl + K` - 剪切当前行
+- `Ctrl + U` - 粘贴
+- `Ctrl + C` - 显示当前光标位置
+
+### 记忆技巧
+- `Ctrl + X` = eXit（退出）
+- `Ctrl + O` = Output（输出/保存）
+- `Ctrl + W` = Where（搜索）
+- nano 底部显示快捷键提示，`^X` 表示 `Ctrl + X`
+
+---
+
+## 完整工作流程示例
+
+### 忽略系统文件的标准流程
+```bash
+# 1. 创建 .gitignore
+touch .gitignore
+
+# 2. 编辑添加忽略规则
+nano .gitignore
+
+# 3. 移除已跟踪的系统文件
+git rm --cached .DS_Store
+
+# 4. 提交更改
+git add .gitignore
+git commit -m "Add .gitignore and remove system files"
+git push origin main
+```
+
+### 验证结果
+```bash
+# 检查状态，应该不再显示被忽略的文件
+git status
+```

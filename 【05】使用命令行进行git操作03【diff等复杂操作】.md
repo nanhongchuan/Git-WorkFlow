@@ -20,7 +20,7 @@
     比较 **工作目录** 和 **暂存区** 的差异。
   * `git diff --staged`
     比较 **暂存区** 和 **本地分支（HEAD）** 的差异。
-  * `git diff HEAD`
+  * `git diff HEAD`（ **HEAD 就是本地仓库的最新提交**）
     比较 **工作目录** 和 **本地分支（HEAD）** 的差异。
 * **分支比较**：
 
@@ -54,7 +54,7 @@
 ## 三、`git stash`（暂存修改）
 
 * **作用**：临时保存当前修改（避免影响分支切换/其他操作）。
-* **`stash`是`藏匿`的意思
+* **`stash`是`藏匿`的意思**
 * **常用命令**：
 
   * `git stash`：保存暂存区改动。
@@ -120,3 +120,168 @@
 * `git rebase -i` 可以修改任意历史提交，但需谨慎，**不要在集成分支使用**。
 * Stash 在 Windows PowerShell 下需要给 `stash@{0}` 加引号：
   `git stash apply "stash@{0}"`.
+
+---
+
+# Git 删除远程分支后的同步与清理机制
+
+## 一、现象说明
+
+当你在 **GitHub 上删除分支** 后，执行：
+
+```bash
+git branch -a
+```
+
+仍可能看到类似：
+
+```
+remotes/origin/feature
+```
+
+这并不是 GitHub 的实时状态，而是：
+
+> 本地保存的 “远程分支缓存（remote-tracking branch）”。
+
+---
+
+## 二、Git 的远程分支缓存机制
+
+* **`remotes/origin/<branch>`** 是本地保存的远程分支快照。
+* 它记录了你上次 `git fetch` 或 `git pull` 时远程仓库的状态。
+* Git 不会自动更新或删除这些记录，除非你主动刷新。
+
+📘 换句话说：
+
+> GitHub 上删除分支 ≠ 本地自动删除缓存。
+> 本地仍保留上次同步时的“远程分支影子”。
+
+---
+
+## 三、同步与清理命令
+
+### ✅ 1. 刷新远程分支状态并清理已删除分支
+
+```bash
+git fetch -p
+```
+
+或：
+
+```bash
+git fetch --prune
+```
+
+**作用：**
+
+* 从远程重新获取分支列表；
+* 自动删除本地不存在的远程分支引用。
+
+执行后再查看：
+
+```bash
+git branch -a
+```
+
+→ 已删除的远程分支将消失。
+
+---
+
+### ✅ 2. 手动清理所有无效远程引用
+
+```bash
+git remote prune origin
+```
+
+**作用：**
+
+* 对 `origin` 远程执行清理；
+* 删除所有远程已不存在的分支缓存。
+
+---
+
+### ✅ 3. 手动删除单个远程追踪分支
+
+```bash
+git branch -dr origin/<branch-name>
+```
+
+**作用：**
+
+* 仅删除指定的远程分支缓存记录。
+* 不影响远程仓库，只影响本地缓存。
+
+---
+
+## 四、命令对比表
+
+| 命令                               | 作用             | 场景       |
+| -------------------------------- | -------------- | -------- |
+| `git fetch`                      | 仅更新现有远程分支内容    | 不会删除本地缓存 |
+| `git fetch -p` / `--prune`       | 更新 + 清理远程已删除分支 | **推荐使用** |
+| `git remote prune origin`        | 清理所有无效的远程引用    | 定期维护用    |
+| `git branch -dr origin/<branch>` | 删除单个无效远程分支缓存   | 定向清理     |
+
+---
+
+## 五、验证命令
+
+查看远程分支状态：
+
+```bash
+git branch -a
+```
+
+输出示例（清理前）：
+
+```
+  main
+* dev
+  remotes/origin/main
+  remotes/origin/dev
+  remotes/origin/feature   ← 实际远程已删除
+```
+
+执行：
+
+```bash
+git fetch -p
+```
+
+再次查看：
+
+```
+  main
+* dev
+  remotes/origin/main
+  remotes/origin/dev
+```
+
+✅ `remotes/origin/feature` 已消失。
+
+---
+
+## 六、核心知识点总结
+
+| 概念                                 | 说明                                               |
+| ---------------------------------- | ------------------------------------------------ |
+| **远程追踪分支（remote-tracking branch）** | 本地缓存的远程分支状态，如 `remotes/origin/feature`           |
+| **不会自动更新**                         | Git 不会自动检测远程分支是否被删除                              |
+| **需手动同步**                          | 通过 `git fetch -p` 或 `git remote prune origin` 更新 |
+| **安全操作**                           | 这些命令仅修改本地缓存，不会影响远程仓库                             |
+
+---
+
+## 七、一句话记忆
+
+> 💡 GitHub 上删分支只是“云端动作”；
+> 本地显示的远程分支是“缓存快照”；
+> 想同步就执行：
+>
+> ```bash
+> git fetch -p
+> ```
+>
+> （fetch = 更新，prune = 清理）
+
+---
