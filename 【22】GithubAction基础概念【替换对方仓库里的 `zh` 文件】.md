@@ -286,6 +286,12 @@ git merge upstream/main
 
 ```
 
+```bash
+# （可选）当前的 Git 分支重命名为 main，并使用 -M 参数强制执行重命名操作
+git branch -M main
+
+```
+
 ### 为什么不直接 `git pull upstream main`?
 
 命令 `git pull upstream main` 默认等同于 `git fetch upstream` 接着 `git merge upstream/main`。看起来是更简洁的，但在这个特定的开源同步流程中，**手动拆分成两步更优越**：
