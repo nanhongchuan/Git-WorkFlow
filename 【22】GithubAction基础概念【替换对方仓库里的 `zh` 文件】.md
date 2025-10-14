@@ -286,6 +286,34 @@ git merge upstream/main
 
 ```
 
+### 为什么不直接 `git pull upstream main`?
+
+命令 `git pull upstream main` 默认等同于 `git fetch upstream` 接着 `git merge upstream/main`。看起来是更简洁的，但在这个特定的开源同步流程中，**手动拆分成两步更优越**：
+
+#### 1. 可控性 (Control)
+
+* **`git fetch upstream`** 只是下载数据，但不会改变你当前分支或工作区。它允许你在本地数据库中**检查**原始仓库 (`upstream`) 有哪些变化（例如，通过 `git log HEAD..upstream/main`），然后再决定是否合并。
+* **`git pull`** 默认是自动执行 `merge` 的，一旦执行，你本地的 `main` 分支就立即被更新了。如果远程分支上有一些意外的、你不想立即合并的修改，你没有机会暂停和检查。
+
+#### 2. 避免意外创建合并提交 (Avoiding Unnecessary Merge Commits)
+
+当你在本地 `main` 分支上工作时，你通常希望它是一个**线性的历史**，完美地反映原始仓库的历史。
+
+* **`git pull`** 默认是 `fetch` + `merge`。如果你的本地 `main` 分支已经有了一些提交（哪怕是你忘了删除的临时提交），`git pull` 会尝试将你的本地提交和远程 `upstream/main` 的提交进行三方合并，**产生一个额外的合并提交 (Merge Commit)**。
+* **理想状态**下，`main` 分支应该只包含来自 `upstream` 的提交。额外的合并提交会使得你的 `main` 历史变得不干净。
+
+### 总结
+
+虽然 `git pull upstream main` 在功能上是等价的，但分解操作（`fetch` 然后 `checkout` 再 `merge`）是 **“谨慎且专业的”** 工作流：
+
+| 分解操作 (`fetch` + `merge`) | `git pull` (一键操作) |
+| :--- | :--- |
+| **可控**：有机会在合并前检查 `upstream/main`。 | **自动**：立即执行合并，没有中间检查步骤。 |
+| **清晰**：明确操作的目标和来源。 | **可能产生**：在某些情况下，会在本地 `main` 上产生不必要的合并提交。 |
+
+因此，手动执行 `git fetch upstream` 后，确保在正确的本地基准分支（`main`）上执行 `git merge upstream/main`，是保持本地代码库与上游仓库**干净同步**的最佳实践。
+
+
 > 如果原仓库主分支是 `master`，请把 `main` 改为 `master`
 
 > **❗️提示**：我 clone 的是 fork 的 origin 仓库，那么与此同时，原始的 upstream 仓库，可能又有更新了，所以我要从 upstream 上 fetch，然后在 checkout，并 merege upstream/main。
@@ -298,7 +326,7 @@ git checkout -b update-zh
 #  Git 会以你当前所在的分支（在这个流程中，是你刚刚同步到最新状态的 main 分支）的 HEAD 指针（也就是最新的那次提交）作为起点，来创建新的 update-zh 分支。继承历史： 这意味着 update-zh 分支的历史记录，与 main 分支的历史记录是完全相同的。它拥有 main 分支上所有的提交记录。继承内容： 你的工作目录中的所有文件内容，在 update-zh 分支创建时，也完全是 main 分支当时的最新状态。
 ```
 
-> 新分支操作更安全，不会影响 `main` 分支
+> 新分支操作更安全，不会影响 `main` 分支git
 
 ---
 
@@ -439,12 +467,45 @@ git commit -m "feat: 更新 zh 文件夹内容到最新文档"
 git push -u origin update-zh
 ```
 
-> **执行 `git push -u origin update-zh` 命令时，做了两件事：**
+> **解释：上游仓库没变，`push -u` 只是设置了**（你本地）**目前分支的 上游跟踪分支（或称上游引用）。**
 
-1.  **推送本地分支：** 将你本地的 `update-zh` 分支（包含你的所有修改提交）推送到名为 `origin` 的远程仓库（即你的 Fork）。
-2.  **创建远程分支：** 如果远程仓库 `origin` 上没有名为 `update-zh` 的分支，Git 就会在推送时**自动为你创建**一个同名的新分支。
+1.  **全局上游仓库（Upstream Remote）没变：**
+    * 原始仓库 **`upstream`** (`https://github.com/opendatalab/MinerU.git`) **永远是上游仓库**，与 `-u` 命令无关。
 
-在此之后，这个新的远程分支 `origin/update-zh` 就存在于你的 GitHub Fork 仓库中，并包含了你提交的修改，从而允许你创建 Pull Request。
+2.  **`push -u` 的作用范围：**
+    * `-u` 作用于 **本地分支**（`update-zh`）和 **你的远程仓库**（`origin`）之间。
+    * 它设置的是本地分支 `update-zh` 的 **默认拉取/推送目标**，即 `origin/update-zh`。
+
+这个默认目标被称为 **"upstream"** 或 **"tracking branch"**（上游跟踪分支），但这个 **"upstream"** 仅在 **本地分支配置的上下文** 中使用，与全局的 `upstream` 远程仓库名是两个概念。
+
+**简而言之：** `-u` 只是帮你配置了一个**默认同步对象**，让你在使用 `git push` 或 `git pull` 时更省事。
+
+---
+
+> **查看命令**
+
+可以使用 `git status` 或 `git branch -vv` 命令来查看当前或所有分支的跟踪关系。
+
+`git branch -vv`这个命令会列出所有本地分支，以及它们各自跟踪的远程分支和它们的同步状态：
+
+```bash
+git branch -vv
+```
+
+**输出示例：**
+
+```
+  main           cbf8e07 [origin/main] Initial commit
+* update-zh      0397969 [origin/update-zh] update
+  feature-branch a1b2c3d [upstream/master: ahead 2] Commit on feature branch
+```
+
+在上面的示例中：
+
+  * `update-zh` 正在跟踪 `[origin/update-zh]`。
+  * `feature-branch` 正在跟踪 `[upstream/master]`。
+
+---
 
 ### 7️⃣ 创建 Pull Request (PR)
 
