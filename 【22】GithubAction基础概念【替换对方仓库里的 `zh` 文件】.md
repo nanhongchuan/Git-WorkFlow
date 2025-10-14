@@ -228,7 +228,7 @@ jobs:
 
 
 
-# 本地准备好的 `zh` 文件夹替换对方仓库里的 `zh` 文件
+# 替换对方仓库里的 `zh` 文件
 
 ## 目标
 
@@ -276,18 +276,26 @@ git remote -v
 
 ```bash
 git fetch upstream
+# 这个命令会把原始仓库的所有新内容（新的提交、分支等）下载到你的本地 Git 数据库中，但不会自动合并或修改你当前工作区的文件。它只是让你知道上游仓库有哪些更新。
+
 git checkout main
+# 切换你的工作目录和 HEAD 指针到本地的 main 分支上。要求你在进行任何新工作前，先确保本地的主分支（main）已经和上游仓库的主分支（upstream/main）对齐。当执行 git checkout main 时，如果本地或远程仓库中不存在名为 main 的分支，执行该命令会失败并报错
+
 git merge upstream/main
+# 将上游仓库的最新内容（你通过 git fetch upstream 下载的）合并到你当前的本地分支。作用是更新你本地的 main 分支的代码和历史，使其与上游仓库的最新状态保持同步。
+
 ```
 
 > 如果原仓库主分支是 `master`，请把 `main` 改为 `master`
 
+> **❗️提示**：我 clone 的是 fork 的 origin 仓库，那么与此同时，原始的 upstream 仓库，可能又有更新了，所以我要从 upstream 上 fetch，然后在 checkout，并 merege upstream/main。
 ---
 
 ### 5️⃣ 创建新分支
 
 ```bash
 git checkout -b update-zh
+#  Git 会以你当前所在的分支（在这个流程中，是你刚刚同步到最新状态的 main 分支）的 HEAD 指针（也就是最新的那次提交）作为起点，来创建新的 update-zh 分支。继承历史： 这意味着 update-zh 分支的历史记录，与 main 分支的历史记录是完全相同的。它拥有 main 分支上所有的提交记录。继承内容： 你的工作目录中的所有文件内容，在 update-zh 分支创建时，也完全是 main 分支当时的最新状态。
 ```
 
 > 新分支操作更安全，不会影响 `main` 分支
@@ -349,117 +357,109 @@ git push -u origin update-zh
 * 审核通过后，`zh` 文件夹更新到原仓库
 * 对方提出修改意见时，可继续在同一分支修改，`add → commit → push`，PR 自动更新
 
----
+## 方法二（改进版）：下载 ZIP + 强制同步远程分支
 
-## 方法二：网络不好，只能下载 ZIP + 初始化仓库
+  * **适用场景：** 网络不好无法 `git clone`，需要从 ZIP 开始，但又想让本地 Git 仓库具备远程分支的历史记录和引用。
+  * **前提：** 你已在 GitHub 上 Fork 了原仓库 (`opendatalab/MinerU`)。
 
-### 1️⃣ 下载原仓库源码
+### 1️⃣ 准备工作：下载 & 初始化
 
-1. 打开原仓库页面，例如：`https://github.com/opendatalab/MinerU`
-2. 点击 **Code → Download ZIP**
-3. 解压到本地，例如 `MinerU`
+1.  打开原仓库页面，点击 **Code → Download ZIP**，解压到 `MinerU` 目录。
+2.  进入目录并初始化本地 Git 仓库：
 
----
-
-### 2️⃣ 初始化本地 Git 仓库
+<!-- end list -->
 
 ```bash
 cd MinerU
 git init
 ```
 
----
+### 2️⃣ 配置远程仓库
 
-### 3️⃣ 添加远程仓库
+  * 将你的 Fork 仓库 (`nanhongchuan/MinerU`) 设置为 `origin`。
+  * 将原仓库 (`opendatalab/MinerU`) 设置为 `upstream`。
 
-* 添加上游仓库：
+<!-- end list -->
 
 ```bash
 git remote add upstream https://github.com/opendatalab/MinerU.git
+git remote add origin https://github.com/nanhongchuan/MinerU.git
 ```
 
-* 添加自己 Fork 的仓库：
+### 3️⃣ 强制同步远程分支内容 (✅ 关键步骤)
+
+  * **目的：** 获取 `origin` 仓库的完整历史记录和分支结构，并用它覆盖本地当前的主分支（`master` 或 `main`）。
+
+<!-- end list -->
 
 ```bash
-git remote add origin https://github.com/<你的用户名>/MinerU.git
+# 1. 获取远程仓库（origin）的所有分支和历史记录的引用
+git fetch origin
+
+# 2. 强制将本地的主分支（master）指向远程 origin/master 的状态
+#    这会丢弃 ZIP 带来的初始内容，用远程分支的历史记录和文件内容替换
+git reset --hard origin/master
+
+# 检查当前状态，应显示在 master 分支上
+git status
 ```
 
-> ⚠️ 关键点：`upstream` 用于同步原仓库，`origin` 用于推送到 Fork 并创建 PR
+### 4️⃣ 创建新的工作分支
 
----
+  * **目的：** 基于刚刚同步好的 `master` 分支，创建一个新的分支来工作。
 
-### 4️⃣ 创建新分支
+<!-- end list -->
 
 ```bash
 git checkout -b update-zh
 ```
 
----
+### 5️⃣ 进行修改、提交
 
-### 5️⃣ 替换 `zh` 文件夹
+1.  将本地准备好的最新 `zh` 文件夹内容**覆盖**到仓库目录中。
 
-1. 将本地准备好的 `zh` 文件夹复制到仓库目录
-2. 覆盖原有 `zh` 文件夹
-3. 检查替换：
+<!-- end list -->
 
 ```bash
-ls zh
+# 1. 添加所有修改
+git add .
+
+# 2. 提交修改
+git commit -m "feat: 更新 zh 文件夹内容到最新文档"
 ```
 
----
+### 6️⃣ 推送到 Fork 远程仓库
 
-### 6️⃣ 添加修改到 Git 暂存区
+  * **目的**：将本地的新分支 `update-zh` 推送到你的远程 Fork 仓库 `origin` 上。
 
-```bash
-git add zh
-```
-
----
-
-### 7️⃣ 提交修改
+<!-- end list -->
 
 ```bash
-git commit -m "替换 zh 文件夹内容"
-```
-
----
-
-### 8️⃣ 推送到 Fork 的远程仓库
-
-```bash
+# -u 选项设置了上游跟踪
 git push -u origin update-zh
 ```
 
-> 这时修改在远程 Fork 仓库的新分支上，GitHub 会识别可创建 PR
+> **执行 `git push -u origin update-zh` 命令时，做了两件事：**
 
----
+1.  **推送本地分支：** 将你本地的 `update-zh` 分支（包含你的所有修改提交）推送到名为 `origin` 的远程仓库（即你的 Fork）。
+2.  **创建远程分支：** 如果远程仓库 `origin` 上没有名为 `update-zh` 的分支，Git 就会在推送时**自动为你创建**一个同名的新分支。
 
-### 9️⃣ 创建 Pull Request
+在此之后，这个新的远程分支 `origin/update-zh` 就存在于你的 GitHub Fork 仓库中，并包含了你提交的修改，从而允许你创建 Pull Request。
 
-1. 打开你 Fork 的仓库页面
-2. 点击 **Compare & pull request**
-3. 填写：
+### 7️⃣ 创建 Pull Request (PR)
 
-   * **Title**：替换 zh 文件夹内容
-   * **Description**：本次 PR 替换了 zh 文件夹内容，内容已更新为最新翻译/文档
-4. Base repository：原仓库 `opendatalab/MinerU`
-5. Base branch：原仓库 `main` 或 `master`
-6. 点击 **Create pull request**
+1.  打开你的 Fork 仓库页面 (`https://github.com/nanhongchuan/MinerU`)。
+2.  点击 **"Compare & pull request"** 提示或导航到 PR 页面。
+3.  确保 PR 是从 **`nanhongchuan/MinerU:update-zh`** 提向 **`opendatalab/MinerU:master` (或`main`)**。
+4.  填写标题和描述，点击创建 PR。
 
-> 如果不想本地操作，也可以直接在 Fork 的网页上传 `zh` 文件夹，创建新分支，再 PR
+-----
 
----
+### ⚠️ 关于 `git fetch origin` & `git reset --hard origin/master`
 
-### 1️⃣0️⃣ 等待合并
+这个组合在这里能跑通，是因为：
 
-* 审核通过后，`zh` 文件夹更新到原仓库
-* 对方提出修改意见时，可继续在同一分支修改，`add → commit → push`，PR 自动更新
+1.  **`git fetch origin`** 成功下载了 `origin` 仓库（你的 Fork）的所有历史记录和分支引用（例如 `origin/master`），但**没有**改变你的工作区。
+2.  **`git reset --hard origin/master`** 强制将你当前分支（通常是 ZIP 解压后首次 `init` 后的 **`master`** 或 **`main`**）**重置**到 `origin/master` 这个远程引用所指向的最新提交。这同时会更新你的工作区文件，使它们与远程分支完全一致。
 
----
-
-## 总结表
-
-| 方法  | 适用情况          | 核心流程                                                                       |
-| --- | ------------- | -------------------------------------------------------------------------- |
-| 方法一 | 网络正常，可 clone  | Fork → Clone → 添加 upstream → 同步 → 新分支 → 替换 → add → commit → push → PR      |
-| 方法二 | 网络不好，无法 clone | 下载 ZIP → init → 添加 upstream & origin → 新分支 → 替换 → add → commit → push → PR |
+通过这一步骤，你成功地将一个从 ZIP 开始的本地仓库，变成了一个**仿佛是 `git clone` 出来的**、拥有完整历史记录和正确分支引用（`origin/master`）的本地仓库。
