@@ -361,9 +361,46 @@ git commit -m "替换 zh 文件夹内容"
 ### 9️⃣ 推送分支到你 Fork 的远程仓库
 
 ```bash
+# -u 选项设置了上游跟踪，update-zh是本地分支的名字，如果远端没有会自动创建 git push origin <本地分支名>（:<远程分支名>）
 git push -u origin update-zh
 ```
+> **解释：上游仓库没变，`push -u` 只是设置了**（你本地）**目前分支的 上游跟踪分支（或称上游引用）。**
 
+1.  **全局上游仓库（Upstream Remote）没变：**
+    * 原始仓库 **`upstream`** (`https://github.com/opendatalab/MinerU.git`) **永远是上游仓库**，与 `-u` 命令无关。
+
+2.  **`push -u` 的作用范围：**
+    * `-u` 作用于 **本地分支**（`update-zh`）和 **你的远程仓库**（`origin`）之间。
+    * 它设置的是本地分支 `update-zh` 的 **默认拉取/推送目标**，即 `origin/update-zh`。
+
+这个默认目标被称为 **"upstream"** 或 **"tracking branch"**（上游跟踪分支），但这个 **"upstream"** 仅在 **本地分支配置的上下文** 中使用，与全局的 `upstream` 远程仓库名是两个概念。
+
+**简而言之：** `-u` 只是帮你配置了一个**默认同步对象**，让你在使用 `git push` 或 `git pull` 时更省事。
+
+---
+
+> **查看命令**
+
+可以使用 `git status` 或 `git branch -vv` 命令来查看当前或所有分支的跟踪关系。
+
+`git branch -vv`这个命令会列出所有本地分支，以及它们各自跟踪的远程分支和它们的同步状态：
+
+```bash
+git branch -vv
+```
+
+**输出示例：**
+
+```
+  main           cbf8e07 [origin/main] Initial commit
+* update-zh      0397969 [origin/update-zh] update
+  feature-branch a1b2c3d [upstream/master: ahead 2] Commit on feature branch
+```
+
+在上面的示例中：
+
+  * `update-zh` 正在跟踪 `[origin/update-zh]`。
+  * `feature-branch` 正在跟踪 `[upstream/master]`。
 ---
 
 ### 1️⃣0️⃣ 创建 Pull Request
@@ -412,6 +449,18 @@ git init
 ```bash
 git remote add upstream https://github.com/opendatalab/MinerU.git
 git remote add origin https://github.com/nanhongchuan/MinerU.git
+```
+
+此时输入
+```bash
+git status
+```
+会提示一大堆文件没有被跟踪，此时可以强制切换分支（会丢失未跟踪的文件）：
+
+```bash
+git checkout -f master
+# 或
+git switch -f master
 ```
 
 ### 3️⃣ 强制同步远程分支内容 (✅ 关键步骤)
