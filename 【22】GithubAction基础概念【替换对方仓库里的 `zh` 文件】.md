@@ -463,7 +463,7 @@ git commit -m "feat: 更新 zh 文件夹内容到最新文档"
 <!-- end list -->
 
 ```bash
-# -u 选项设置了上游跟踪，update-zh是本地仓库的名字，如果远端没有会自动创建
+# -u 选项设置了上游跟踪，update-zh是本地分支的名字，如果远端没有会自动创建 git push origin <本地分支名>（:<远程分支名>）
 git push -u origin update-zh
 ```
 
