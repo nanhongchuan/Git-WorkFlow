@@ -282,7 +282,7 @@ git checkout main
 # 切换你的工作目录和 HEAD 指针到本地的 main 分支上。要求你在进行任何新工作前，先确保本地的主分支（main）已经和上游仓库的主分支（upstream/main）对齐。当执行 git checkout main 时，如果本地或远程仓库中不存在名为 main 的分支，执行该命令会失败并报错
 
 git merge upstream/main
-# 将上游仓库的最新内容（你通过 git fetch upstream 下载的）合并到你当前的本地分支。作用是更新你本地的 main 分支的代码和历史，使其与上游仓库的最新状态保持同步。
+# 将上游仓库的 main 分支最新内容（你通过 git fetch upstream 下载的）合并到你当前的本地分支。作用是更新你本地目前选择的分支的代码和历史，使其与上游仓库的 main 分支最新状态保持同步。
 ```
 
 ```bash
