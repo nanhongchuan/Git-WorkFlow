@@ -481,6 +481,10 @@ git fetch origin
 #    这会丢弃 ZIP 带来的初始内容，用远程分支的历史记录和文件内容替换
 git reset --hard origin/master
 
+# 3. 可以不用 2，用这个指令也可以
+git merge origin/master
+# 将上游仓库的 main 分支最新内容（你通过 git fetch upstream 下载的）合并到你当前的本地分支。作用是更新你本地目前选择的分支的代码和历史，使其与上游仓库的 main 分支最新状态保持同步。
+
 # 检查当前状态，应显示在 master 分支上
 git status
 ```
