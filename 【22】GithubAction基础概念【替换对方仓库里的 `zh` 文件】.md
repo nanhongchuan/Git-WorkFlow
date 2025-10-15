@@ -283,13 +283,11 @@ git checkout main
 
 git merge upstream/main
 # 将上游仓库的最新内容（你通过 git fetch upstream 下载的）合并到你当前的本地分支。作用是更新你本地的 main 分支的代码和历史，使其与上游仓库的最新状态保持同步。
-
 ```
 
 ```bash
 # （可选）当前的 Git 分支重命名为 main，并使用 -M 参数强制执行重命名操作
 git branch -M main
-
 ```
 
 ### 为什么不直接 `git pull upstream main`?
