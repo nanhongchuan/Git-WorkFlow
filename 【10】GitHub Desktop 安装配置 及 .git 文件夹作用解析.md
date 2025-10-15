@@ -96,7 +96,7 @@ git push -u origin feature3
 ### 分离头指针（Detached HEAD）知识点总结
 
 ### 一、概念定义
-zhi yao
+
   当你从一个历史提交（commit）检出时，HEAD 指针**直接指向该 commit 本身**，而不是某个分支（branch）的引用。
 
   > HEAD 不再“附着”在任何分支上，因此称为“分离”（detached）。
