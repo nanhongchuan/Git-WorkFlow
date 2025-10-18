@@ -63,6 +63,19 @@ Gemini CLI（Command Line Interface）是 Google 推出的一款**开源 AI Agen
         export https_proxy= http_proxy= all_proxy=
         ```
 
+这样设置后，你只是告诉系统：
+
+- “今后终端程序（如 curl、git、pip、npm）发出请求时，请通过 127.0.0.1:7890 代理。”
+
+- 但真正提供代理转发功能的，是 ClashX 的本地监听端口。
+也就是说：
+
+  - `.zshrc` 是静态配置代理地址；
+
+  - ClashX 是动态提供代理通道。
+
+**结论：没有 ClashX 监听 → 代理变量仍在 → 但网络请求无法连接。**
+
     3.  执行 `source [配置文件名]` ，如：
         ```bash
         source ~/.zshrc
@@ -317,3 +330,6 @@ Gemini CLI（Command Line Interface）是 Google 推出的一款**开源 AI Agen
 Gemini CLI（CUI）结合内置工具、shell 执行与可配置的 MCP 插件，能把日常文件处理、网页提取、多模态识别与自动化浏览器操作串成高效流水线。合理运用 `/tools`、`/compress`、`/memory` 与 MCP 配置，可以把重复劳动自动化并保持项目规范与可回溯性。
 
 ---
+
+
+
