@@ -148,8 +148,8 @@ Gemini CLI（Command Line Interface）是 Google 推出的一款**开源 AI Agen
 
 #### 3) `/tools`：工具系统与说明
 
-* `/tools`：列出可用工具（也可能是 `/tools no dsc` 的变体，视实现不同）。
-* `/tools desc` 或 `/tools d e s c`：显示每个工具的详细说明（功能、参数、注意事项）。
+* `/clear`：清除屏幕 
+* `/tools nodesc`：显示每个工具（不详细显示说明，如功能、参数、注意事项）。
 * 常见工具范例：
 
   * 读取文件夹（列出目录、预览）
