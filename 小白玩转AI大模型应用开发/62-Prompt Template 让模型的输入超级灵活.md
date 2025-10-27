@@ -94,7 +94,7 @@ for text in text_list:
 
 ---
 
-## 六、Chat Prompt Template —— 简化多角色模板
+## 六、ChatPromptTemplate —— 简化多角色模板
 
 如果不想分别使用三种模板，可以使用统一的：
 

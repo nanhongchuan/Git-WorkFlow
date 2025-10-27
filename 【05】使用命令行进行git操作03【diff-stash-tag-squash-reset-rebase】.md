@@ -554,3 +554,198 @@ git rebase --abort
 ```
 
 ---
+
+# `git rebase -i`（交互式 rebase）详解
+
+在 Git 中，压缩（或合并）commit 历史到某个步骤最常用的方法是使用 `git rebase -i`（交互式 rebase）。这个操作能让你重写历史，将多个 commit 合并成一个，或者修改 commit 消息、重新排序 commit 等。
+
+**核心思想：** 确定你想要合并的 commit 范围，然后告诉 Git 将这些 commit 合并成一个。
+
+### 方法一：使用 `git rebase -i` (推荐和最强大)
+
+这种方法允许你完全控制 commit 的合并、重排、编辑等。
+
+**步骤 1：确定要合并的 commit 范围**
+
+你需要找到一个“基准点” commit，也就是你想进行合并操作的**第一个 commit 的前一个 commit**。
+
+假设你的 commit 历史如下：
+
+```
+A --- B --- C --- D --- E (HEAD)
+```
+
+如果你想把 `C`, `D`, `E` 这三个 commit 合并成一个，那么你的基准点就是 `B`。
+
+你可以通过以下两种方式指定范围：
+
+1.  **相对于 HEAD 的 N 个 commit：**
+    如果你想合并最近的 `N` 个 commit，可以使用 `HEAD~N`。
+    例如，要合并 `E, D, C` 共 3 个 commit，基准点是 `HEAD~3` (即 B)。
+    ```bash
+    git rebase -i HEAD~3
+    ```
+
+2.  **通过 commit hash：**
+    如果你知道基准点 commit 的 hash 值（例如 `B` 的 hash 是 `abcdefg`），可以使用：
+    ```bash
+    git rebase -i abcdefg
+    ```
+    请注意，`abcdefg` **本身不会被修改**。`rebase -i` 是从你指定的 commit **之后**的第一个 commit 开始操作。
+
+**步骤 2：在交互式编辑器中操作**
+
+执行 `git rebase -i HEAD~N` 或 `git rebase -i <commit_hash>` 后，会打开一个文本编辑器（通常是 Vim 或 Nano），显示类似下面的内容：
+
+```
+pick ab1234c C: message of commit C
+pick cd5678e D: message of commit D
+pick ef9012f E: message of commit E
+
+# Rebase abcdefg..ef9012f onto abcdefg (3 commands)
+#
+# Commands:
+# p, pick <commit> = use commit
+# r, reword <commit> = use commit, but edit the commit message
+# e, edit <commit> = use commit, but stop for amending
+# s, squash <commit> = use commit, but meld into previous commit
+# f, fixup <commit> = like "squash", but discard this commit's log message
+# x, exec <command> = run command (the rest of the line) for each commit
+# b, break = stop here (continue rebase later with 'git rebase --continue')
+# d, drop <commit> = remove commit
+# l, label <label> = add a label that you can jump to
+# t, reset <label> = reset HEAD to a label
+# m, merge [-C <commit> | -c <commit>] <label> [# <oneline>]
+# .       create a merge commit using the original merge commit's
+# .       message (or the oneline if specified); see 'git help commit' for options
+#
+# These lines can be re-ordered; they are executed from top to bottom.
+#
+# If you remove a line here THAT COMMIT WILL BE LOST.
+#
+# However, if you remove everything, the rebase will be aborted.
+#
+```
+
+**关键操作：**
+
+*   **`pick`：** 保留这个 commit。通常，你要保留的第一个 commit （即你希望能最终显示在历史中最旧的那个 commit）使用 `pick`。
+*   **`squash` (或 `s`)：** 将这个 commit 的更改内容合并到**前一个 `pick` 或 `squash` 的 commit** 中。它的 commit 消息会与前一个 commit 的消息合并，你将有机会编辑最终的合并消息。
+*   **`fixup` (或 `f`)：** 类似于 `squash`，但是它会丢弃当前这个 commit 的消息，只保留前一个 commit 的消息。
+
+**示例：合并 C, D, E**
+
+为了将 `D` 和 `E` 合并到 `C` 中，你需要这样做：
+
+1.  保持最上面的 `C` commit 为 `pick`。
+2.  将 `D` 和 `E` 的 `pick` 改为 `squash` 或 `s`。
+
+```
+pick ab1234c C: message of commit C
+s    cd5678e D: message of commit D
+s    ef9012f E: message of commit E
+```
+
+**步骤 3：保存并关闭编辑器**
+
+*   **Vim 用户：** 按 `Esc`，输入 `:wq`，然后按 `Enter`。
+*   **Nano 用户：** 按 `Ctrl + X`，然后按 `Y` (保存)，再按 `Enter` (确认文件名)。
+
+**步骤 4：编辑合并后的 commit 消息**
+
+Git 会再次打开一个编辑器，其中包含了你选择 `squash` 的所有 commit 的消息。你可以在这里编辑，创建一个清晰、简洁、描述性的新 commit 消息，包含所有合并的更改。
+
+```
+# This is a combination of 3 commits.
+# The first commit's message is:
+C: message of commit C
+
+# This is the 2nd commit message:
+D: message of commit D
+
+# This is the 3rd commit message:
+E: message of commit E
+
+# Please enter the commit message for your changes. Lines starting
+# with '#' will be ignored, and an empty message aborts the commit.
+#
+# On branch feat/new-feature
+# All changes have been committed.
+#
+```
+
+编辑成你想要的新消息，例如：
+
+```
+Feature: Implemented new login flow with error handling
+
+This commit combines the initial login implementation (C),
+user input validation (D), and final UI adjustments (E).
+```
+
+**步骤 5：保存并关闭编辑器**
+
+完成编辑后，再次保存并关闭编辑器。Git 会完成 rebase 过程，你的 commit 历史就会被压缩。
+
+现在你的历史看起来会像这样：
+
+```
+A --- B --- F (HEAD)  <-- F是C,D,E合并后的新commit
+```
+
+### 方法二：使用 `git reset --soft` (仅适用于合并最近的部分 commit)
+
+如果你只是想将最近的 N 个 commit 合并成一个，并且这些 commit 还没有被推送到远程仓库，那么 `git reset --soft` 是一个更简单的办法。
+
+**步骤 1：重置 HEAD 到目标父 commit**
+
+假设你想要合并最近 3 个 commit (E, D, C)，基准点是 `HEAD~3` (即 B)。
+
+```bash
+git reset --soft HEAD~3
+```
+这会将你的 `HEAD` 指针移动到 `B`，但会保留 `C, D, E` 中所有更改为“暂存区”（staged）状态。
+
+**步骤 2：重新提交**
+
+现在，所有你想要合并的更改都在暂存区中。你可以像平常一样创建一个新的 commit：
+
+```bash
+git commit -m "New single commit message for C, D, E"
+```
+
+这会将所有暂存的更改合并成一个全新的 commit。
+
+你的历史会变成：
+
+```
+A --- B --- F (HEAD)
+```
+
+**限制：**
+*   这种方法不能让你灵活地选择哪些 commit 合并，哪些不合并。它会合并 `HEAD` 到 `HEAD~N` 之间**所有**的 commit。
+*   它无法重排 commit 顺序或修改原始 commit 的消息。
+
+### 强制推送 (`git push -f` 或 `--force-with-lease`)
+
+**重要警告：** 如果你已经将这些 commit 推送到远程仓库，并且在本地重写了历史，那么你需要强制推送才能更新远程仓库。
+
+```bash
+git push --force-with-lease origin <branch_name>
+```
+或者，如果 `origin` 是你的上游分支，你可以使用：
+```bash
+git push --force-with-lease
+```
+
+**`--force-with-lease`** 是比 `-f` (`--force`) 更安全的选项，因为它会检查远程分支是否在你上次拉取后被他人更新过。如果有人在期间推送了新的 commit，`--force-with-lease` 会拒绝推送，从而避免你意外覆盖他人的工作。
+
+**切记：** **永远不要**强制推送已经被多人共享和工作的分支，除非你完全清楚其后果，并且已与团队沟通好。重写共享历史会导致其他协作者出现问题。通常，这种操作只在个人开发分支或 PR 提交前进行。
+
+### 总结
+
+*   **`git rebase -i`**：最灵活、最强大的方法，适用于任意范围的 commit 历史重写和合并。
+*   **`git reset --soft` + `git commit`**：适用于合并最近的连续 commit，操作相对简单，但不够灵活。
+*   **强制推送**：重写历史后，如果已推送到远程，则必须强制推送。请小心使用，尤其是在共享分支上。
+
+在实际工作中，通常在提交 Pull Request (PR) 之前，将一个功能分支上的零碎 commit (`fix bug`, `oops`, `forgot a file`) 合并成几个逻辑上清晰的大 commit，以便代码审查和保持干净的历史。

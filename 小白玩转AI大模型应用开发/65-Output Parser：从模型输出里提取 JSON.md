@@ -43,8 +43,8 @@
 
 需要安装并导入模块：
 ```python
-from pydantic import BaseModel, Field
 from langchain.output_parsers import PydanticOutputParser
+from pydantic import BaseModel, Field 
 from typing import List
 ```
 
@@ -58,6 +58,8 @@ from typing import List
 ## 五、定义数据模型
 
 以书籍信息为例，定义一个 `BookInfo` 类：
+
+![alt text](image-73.png)
 
 ```python
 class BookInfo(BaseModel):
