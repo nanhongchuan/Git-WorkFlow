@@ -25,6 +25,26 @@ Gemini CLI（Command Line Interface）是 Google 推出的一款**开源 AI Agen
   * **启动命令**：`gemini`
   * **首次启动**：选择主题，并使用 **Google 账号**进行身份验证。
 
+如果你 **不通过 `vim ~/.zshrc` 添加这句**：
+
+```bash
+
+export PATH="$HOME/.npm-global/bin:$PATH"
+```
+
+而你的 npm 或某些全局包确实被安装在
+`~/.npm-global/bin` 这个目录下，
+
+那系统（包括 codex、终端、VSCode 里的命令行等）
+就**找不到这些命令**，比如 `npm`、`npx`、`vite`、`eslint` 等。
+
+🧠 **一句话总结：**
+
+> 这句就是告诉系统“去 `.npm-global/bin` 里也找命令”。
+> 不加的话，命令确实会找不到。
+
+
+
 ### 三、认证失败的解决方案（网络与环境配置）
 
 #### 1\. 情况一：网络原因导致的认证失败

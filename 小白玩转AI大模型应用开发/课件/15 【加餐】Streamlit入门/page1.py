@@ -11,7 +11,7 @@ a
 [11, 22, 33]
 {"a": "1", "b": "2", "c": 3}
 
-st.image("./头像.png", width=200)
+st.image("小白玩转AI大模型应用开发/课件/15 【加餐】Streamlit入门/image.png", width=200)
 
 df = pd.DataFrame({"学号": ["01", "02", "03", "04", "05"],
               "班级": ["二班", "一班", "二班", "三班", "一班"],
@@ -19,4 +19,4 @@ df = pd.DataFrame({"学号": ["01", "02", "03", "04", "05"],
 
 st.dataframe(df)
 st.divider()
-st.table(df)
+st.table(df) 

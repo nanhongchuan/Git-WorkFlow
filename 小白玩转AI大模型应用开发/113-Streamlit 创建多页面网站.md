@@ -1,4 +1,4 @@
-# 113-Streamlit 创建多页面网站
+ # 113-Streamlit 创建多页面网站
 
 **Streamlit 创建多页面网站知识点**
 
@@ -21,4 +21,128 @@
     3.  **重要意义：** 强调了会话状态在多页面应用中保持数据一致性和用户体验的重要性。
 
 ---
+
+# Python 导入不同路径下文件的规则总结
+
+### ✅ 一、同一文件夹下
+
+可以直接导入：
+
+```python
+from utils import generate_script
+```
+
+---
+
+### ✅ 二、不同文件夹下
+
+如果文件结构是：
+
+```
+project/
+├── app/
+│   └── main.py
+└── utils/
+    └── abc/
+        └── helper.py
+```
+
+在 `main.py` 中导入 `helper.py` 的函数写法如下：
+
+```python
+from utils.abc.helper import generate_script
+```
+
+> 启动程序时需在项目根目录执行，例如：
+>
+> ```bash
+> cd project
+> python app/main.py
+> ```
+
+---
+
+### ✅ 三、临时修改路径导入（不推荐但可用）
+
+```python
+import sys
+sys.path.append('../utils')
+from helper import generate_script
+```
+
+---
+
+### ✅ 四、相对导入（仅适用于包内模块）
+
+若 `app` 和 `utils` 都有 `__init__.py` 文件，则可写：
+
+```python
+from ..utils.helper import generate_script
+```
+
+> 运行方式需为包模式：
+>
+> ```bash
+> python -m app.main
+> ```
+
+---
+
+💡**总结一句话：**
+
+> 同目录可直接导入；不同目录需写清模块路径（推荐 `from package.module import func`），或在运行时修改 `sys.path`。
+
+
+# `utils` 介绍
+
+在 Python 项目里，`utils` 是 **“utilities（工具）”** 的缩写，
+一般表示 **工具函数模块** 或 **工具包**，专门放那些“通用的小功能函数”。
+
+> `utilities`  **->**   /juːˈtɪlətiz/
+
+---
+
+### 📘 通俗理解：
+
+`utils.py` 或 `utils/` 文件夹，就像一个“工具箱”，
+里面放的不是业务逻辑，而是你在项目里**到处可能会用到的小函数**。
+
+---
+
+### 🧰 举几个常见例子：
+
+| 功能类别  | 函数示例                               | 说明          |
+| ----- | ---------------------------------- | ----------- |
+| 文件操作  | `read_json()`, `save_csv()`        | 读取或保存文件     |
+| 字符串处理 | `clean_text()`, `slugify()`        | 统一清洗或格式化字符串 |
+| 日志工具  | `log_info()`, `log_error()`        | 封装打印或日志写入   |
+| 网络请求  | `fetch_data(url)`                  | 封装 HTTP 请求  |
+| 时间处理  | `get_timestamp()`, `format_date()` | 统一日期格式      |
+
+---
+
+### 💡 举个例子
+
+假设 `utils.py` 里写：
+
+```python
+def clean_text(text):
+    return text.strip().lower()
+```
+
+在 `main.py` 中：
+
+```python
+from utils import clean_text
+
+content = " Hello World "
+print(clean_text(content))  # 输出：hello world
+```
+
+---
+
+✅ **一句话总结：**
+
+> `utils` 通常是放“可复用的小工具函数”的文件或包，用来让主程序更简洁、模块化。
+
 

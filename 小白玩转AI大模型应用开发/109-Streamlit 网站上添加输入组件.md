@@ -118,7 +118,7 @@
     ```python
     agreed = st.checkbox("我已阅读并同意以上条款")
     if agreed:
-        st.success("您已同意，可以继续操作。")
+        st.write("您已同意，可以继续操作。")
     else:
         st.info("请先勾选同意条款。")
     ```
