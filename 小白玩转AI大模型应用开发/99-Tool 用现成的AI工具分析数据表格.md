@@ -1,4 +1,4 @@
-# 99-Tool 用现成的AI工具分析数据表格
+ # 99-Tool 用现成的AI工具分析数据表格
 
 #### **1. CSV文件基础知识**
 
@@ -92,3 +92,4 @@
 
 *   **核心价值：** 通过短短几行代码，即可拥有一个能够与本地CSV数据文件交互的AI助手。
 *   **扩展性：** LangChain 除了 CSV Agent，还提供其他开箱即用的 Agent 执行器（如 Pandas Agent、SQL Agent 等），鼓励探索和尝试。
+https://python.langchain.com/does/integrations/toolkfts/

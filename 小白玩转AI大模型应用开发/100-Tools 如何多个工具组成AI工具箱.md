@@ -1,5 +1,8 @@
 # 100-Tools 如何多个工具组成AI工具箱
 
+![alt text](image-135.png)
+![alt text](image-136.png)
+
 ### 1. 目标与问题
 
 *   使Agent能够使用多种工具，包括自定义工具和调用已有Agent的能力。
@@ -12,6 +15,16 @@
 *   **特点：** 继承 `base_tool` 数据类型。
 *   **操作：** 直接将其添加到工具列表中即可，无需额外步骤。
 *   **示例：** `文本工具`, `字数工具`, `计算工具`。
+
+```python
+class TextLengthTool(BaseTool):
+    name = "文本字数计算工具"
+    description = "当你需要计算文本包含的字数时，使用此工具"
+
+    def _run(self, text):
+        return len(text)
+```
+
 
 #### 2.2 将现有Agent包装为工具
 
@@ -26,6 +39,24 @@
         *   **操作：** 传入Agent执行器的 `invoke` 方法。
         *   **示例：** `拍照Agent执行器.invoke`, `CSV Agent执行器.invoke`。
 *   **结果：** 获得一个包含所有（基础工具 + 包装的Agent工具）的综合工具列表。
+
+```python
+tools=[
+    Tool(
+        name="Python代码工具",
+        description="""当你需要借助Python解释器时，使用这个工具。
+        用自然语言把要求给这个工具，它会生成Python代码并返回代码执行的结果。""",
+        func=python_agent_executor.invoke
+    ),
+    Tool(
+        name="CSV分析工具",
+        description="""当你需要回答有关house_price.csv文件的问题时，使用这个工具。
+        它接受完整的问题作为输入，在使用Pandas库计算后，返回答案。""",
+        func=csv_agent_executor.invoke
+    ),
+    TextLengthTool() # 文本字数计算工具因为继承了BaseTool ，数据类型属于工具，不需要做其他额外步骤
+]
+```
 
 ### 3. 创建多工具Agent实例
 
@@ -46,6 +77,24 @@
 *   **可选配置：**
     *   `handle_parsing_errors=True`：当解析错误出现时，Agent会进行处理，增加鲁棒性。
     *   `verbose=True`：在调用时显示详细过程（默认 `False`，只返回最终结果）。
+
+
+```python
+memory = ConversationBufferMemory(
+    memory_key='chat_history',
+    return_messages=True
+)
+prompt = hub.pull("hwchase17/structured-chat-agent")
+prompt
+```
+
+```python
+    agent = create_structured_chat_agent(
+    llm=model,
+    tools=tools,
+    prompt=prompt
+)
+```
 
 ### 5. 测试与验证
 

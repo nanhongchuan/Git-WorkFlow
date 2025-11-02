@@ -1,5 +1,7 @@
 # 97-Agent 自定义你的AI工具
 
+![alt text](image-127.png)
+ 
 #### 1. Agent 核心概念
 
 *   **定义：** Agent（智能体/代理）是能理解用户的查询或指令，进行推理，并执行特定任务，最后输出响应的服务。
@@ -36,6 +38,11 @@ Agent 的每个步骤通常遵循 **推理-行动-观察（Reasoning-Action-Obse
 *   **1. 模型 (Model)：**
     *   **作用：** Agent 的大脑，不可或缺。
     *   **建议参数：** `temperature` 设置为很小的数字（例如0），以确保模型严格按 ReAct 框架输出，减少创造性。
+    
+    ```python
+    model = ChatOpenAI (model="gpt-3.5-turbo", temperature=0)
+    ```
+    
 *   **2. 工具 (Tools)：**
     *   **作用：** 补充大语言模型本身的缺陷（例如：LLM不擅长精确计数），提供特定能力。
     *   **定义方法：**
@@ -45,15 +52,36 @@ Agent 的每个步骤通常遵循 **推理-行动-观察（Reasoning-Action-Obse
             *   `description`：工具的描述，帮助 Agent 理解工具作用。
         *   **核心功能：** 在 `_run` 方法中实现工具的实际功能（该方法会在 Agent 调用工具时被执行）。
         *   **集合：** 将工具类的实例放入一个 `tools` 列表，供 Agent 执行器使用。
+
+```python
+from langchain.tools import BaseTool
+
+class TextLengthTool(BaseTool):
+    name = "文本字数计算工具"
+    description = "当你被要求计算文本的字数时，使用此工具"
+
+    def _run(self, text):
+        return len(text)
+```
+
+![alt text](image-128.png)
+![alt text](image-130.png)        
+
 *   **3. 提示词 (Prompt)：**
     *   **作用：** 告知模型要遵循 ReAct 框架，并介绍可使用的工具。
     *   **获取来源：**
-        *   **LangChain Hub：** 一个用于管理和共享 LangChain 相关资源的在线平台，可获取预定义的提示词模板。
+        *   **LangChain Hub：** 一个用于管理和共享 LangChain 相关资源的在线平台，可获取预定义的提示词模板。https://smith.langchain.com/hub
         *   **获取方式：**
             1.  安装 `langchainhub` 库。
             2.  从 `langchain` 导入 `hub`。
             3.  调用 `hub.pull()` 并传入提示词在 LangChain Hub 上的路径（例如：`"hwchase17/structured-chat-agent"`）。
         *   **输出：** `ChatPromptTemplate` 对象。
+
+```python
+from langchain import hub
+prompt = hub.pull("hwchase17/structured-chat-agent")
+```
+![alt text](image-131.png)  
 
 #### 4. Agent 的初始化与执行 (LangChain)
 
@@ -61,6 +89,15 @@ Agent 的每个步骤通常遵循 **推理-行动-观察（Reasoning-Action-Obse
     *   **导入：** 从 `langchain.agents` 导入 `create_structured_chat_agent`。
     *   **调用：** `create_structured_chat_agent(llm=模型实例, tools=工具列表, prompt=提示模板)`。
     *   **作用：** 定义了 Agent 的思考方式和可用能力。
+
+```python
+agent = create_structured_chat_agent(
+    llm=model,
+    tools=tools,
+    prompt=prompt
+)
+```
+   
 *   **2. 初始化 Agent Executor (Agent 执行器)：**
     *   **作用：** 实际执行 Agent 逻辑和调用工具的组件。
     *   **导入：** 从 `langchain.agents` 导入 `AgentExecutor`。
@@ -75,10 +112,24 @@ Agent 的每个步骤通常遵循 **推理-行动-观察（Reasoning-Action-Obse
         *   `verbose=True`：
             *   **默认：** `False` (只返回最终结果)。
             *   **设置 `True` 时：** 以详细模式运行，打印 Agent 的行动过程日志（推理-行动-观察的每一步）。
+
+```python
+
+memory = ConversationBufferMemory(
+        memory_key='chat_history',
+        return_messages=True
+)
+
+agent_executor = AgentExecutor.from_agent_and_tools(
+    agent=agent, tools=tools, memory=memory, verbose=True, handle_parsing_errors=True
+)
+```
+
 *   **3. 运行 Agent：**
     *   调用 `AgentExecutor` 实例的 `invoke()` 方法，传入用户问题 (例如：`executor.invoke({"input": "你的问题"})`)。
     *   **输出：** 一个包含 `input`、`output` 和 `chat_history` 的字典。
-    *   **获取结果：** 可以直接提取 `output` 键的值。
+    *   **获取结果：** 可以直接提取 `output` 
+    *   直接用 `TextLengthToo1`得出的结果其实是一致的
 
 #### 5. Agent 的优势
 
