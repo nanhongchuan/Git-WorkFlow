@@ -4,7 +4,7 @@
 - 除了原始的 OpenAI API，OpenAI 还推出了 Assistant API（助理 API）。
 - Assistant API 不仅是模型本身，更是基于 OpenAI 模型、可维护对话历史、访问文件并调用工具的能力集合。
 
-![alt text](image-54.png)
+![alt text](images/image-54.png)
 
 ## 2. Assistant API 相对原始 API 的优势
 - 自动保留对话历史，开发者无需手动管理上下文。
@@ -33,9 +33,9 @@
   - Assistant API：主要面向对话型应用（聊天机器人、虚拟助理等）。
   - LangChain：整合外部资源/接口，覆盖更广泛的应用形态，从简单聊天到复杂 AI 系统。
 
-![alt text](image-55.png)
-![alt text](image-56.png)
-![alt text](image-57.png)
+![alt text](images/image-55.png)
+![alt text](images/image-56.png)
+![alt text](images/image-57.png)
 
 ## 5. 选型建议
 - 快速上手、仅基于 OpenAI 模型的应用：优先考虑 Assistant API。

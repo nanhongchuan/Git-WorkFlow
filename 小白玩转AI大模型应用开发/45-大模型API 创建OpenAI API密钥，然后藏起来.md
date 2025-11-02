@@ -50,9 +50,9 @@ openai.api_key = "sk-xxxxxxxxxxxxxxxx"
 - 上传到 GitHub 时可能泄漏；
 - 协作代码中他人可直接看到密钥。
 
-![alt text](image-8.png)
+![alt text](images/image-8.png)
 
-![alt text](image-9.png)
+![alt text](images/image-9.png)
 
 ---
 
@@ -95,8 +95,8 @@ echo %OPENAI_API_KEY%
 
 > 文档中提到 Mac 用户可使用“系统偏好设置”或终端方式设置。
 
-![alt text](image-10.png)
+![alt text](images/image-10.png)
 
-![alt text](image-11.png)
+![alt text](images/image-11.png)
 
-![alt text](image-12.png)
+![alt text](images/image-12.png)

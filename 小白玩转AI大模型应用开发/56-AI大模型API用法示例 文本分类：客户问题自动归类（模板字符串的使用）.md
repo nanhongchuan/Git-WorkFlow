@@ -16,7 +16,7 @@
   - 故障问题
   - 其他（若不属于以上任何类别，则归入此类）
 
-![alt text](image-62.png)
+![alt text](images/image-62.png)
 
 ## 3. 提示词（Prompt）设计要点
 - 明确任务：对“用户对产品的疑问”进行分类
@@ -39,7 +39,7 @@
 
 示例（Python 伪代码）：
  
-![alt text](image-63.png)
+![alt text](images/image-63.png)
 
 要点回顾：
 - 使用 `", ".join(categories)` 将列表拼接为字符串

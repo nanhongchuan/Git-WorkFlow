@@ -59,7 +59,7 @@ from typing import List
 
 以书籍信息为例，定义一个 `BookInfo` 类：
 
-![alt text](image-73.png)
+![alt text](images/image-73.png)
 
 ```python
 class BookInfo(BaseModel):

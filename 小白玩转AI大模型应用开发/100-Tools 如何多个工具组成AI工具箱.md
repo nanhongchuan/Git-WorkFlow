@@ -1,7 +1,7 @@
 # 100-Tools 如何多个工具组成AI工具箱
 
-![alt text](image-135.png)
-![alt text](image-136.png)
+![alt text](images/image-135.png)
+![alt text](images/image-136.png)
 
 ### 1. 目标与问题
 

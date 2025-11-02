@@ -35,14 +35,14 @@
 *   **定义**：在某个 **线程 (Thread)** 上触发调用助手的**动作**。
 *   **过程**：助手会结合线程储存的已有对话、调用模型以及可用工具来执行要求的任务。
 *   **结果**：执行任务后，新的对话消息也会被添加到该线程。
-![alt text](image-78.png)
+![alt text](images/image-78.png)
 ### 2.5. **Run Step (运行步骤)**
 *   **定义**：助手在 **运行 (Run)** 过程中采取的一系列**具体步骤**。
 *   **示例**：比如调用了某个工具、生成了某个消息等。
 *   **作用**：查看运行步骤可以帮助我们理解助手是如何得到最终结果的。
-![alt text](image-79.png)
+![alt text](images/image-79.png)
 ## 3. Assistant API 工作流程 (带记忆的连续对话)
-![alt text](image-80.png)
+![alt text](images/image-80.png)
 OpenAI 官方说明图解：
 1.  **用户**与**助手 (Assistant)** 进行交互。
 2.  **线程 (Thread)** 储存了来自用户和助手的消息。
@@ -58,7 +58,7 @@ Assistant API 内置了以下工具：
 *   **Knowledge Retrieval (文件检索)**
 *   **Custom Function Calling (自定义函数调用)**
 
-![alt text](image-81.png)
+![alt text](images/image-81.png)
 
 ## 5. 与 LangChain 的关联
 

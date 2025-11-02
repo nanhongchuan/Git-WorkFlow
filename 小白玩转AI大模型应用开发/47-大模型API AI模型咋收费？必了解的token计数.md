@@ -30,7 +30,7 @@
    - `completion_tokens`：AI 回复所占的 token 数。
    - `total_tokens`：两者之和，**计费依据**。
 
-![alt text](image-14.png)
+![alt text](images/image-14.png)
    
 2. **示例**：  
    若一次调用中：

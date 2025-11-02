@@ -1,6 +1,6 @@
 # 86-Retrieval Chain 开箱即用的检索增强对话链
 
-![alt text](image-111.png)
+![alt text](images/image-111.png)
 
 #### **一、 `ConversationalRetrievalChain` 是什么？**
 
@@ -72,7 +72,7 @@ retriever = db.as_retriever()
     *   `question`: 用户的问题。
     *   **自动处理：** 本轮对话会自动加入到 `chat_history` 对应的记忆中，实现连续对话。
 
-![alt text](image-113.png)
+![alt text](images/image-113.png)
 
 
 #### **六、 定制化与高级功能**
@@ -82,7 +82,7 @@ retriever = db.as_retriever()
     *   **设置：** 创建链时，在 `from_llm()` 方法中设置 `return_source_documents=True`。
     *   **结果：** 返回字典中会多一个 `source_documents` 键，其值是检索到的文档片段列表（越相关的排在越前面）。
 
-![alt text](image-114.png) 
+![alt text](images/image-114.png) 
 
 2.  **上下文窗口限制 (Context Window Limitation)**
     *   **问题：** 默认情况下，所有检索到的片段都会传递给模型。如果片段过长或数量过多，可能会超出某些模型的上下文窗口限制。

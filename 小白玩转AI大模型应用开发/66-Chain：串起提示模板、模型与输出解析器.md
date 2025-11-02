@@ -16,9 +16,9 @@
 
 ## 二、`invoke` 方法的设计理念
 
-![alt text](image-74.png)
-![alt text](image-75.png)
-![alt text](image-76.png)
+![alt text](images/image-74.png)
+![alt text](images/image-75.png)
+![alt text](images/image-76.png)
 
 `invoke` 方法是 **LangChain 表达式语言**（LCEL）中 `Runnable` 通用的可调用接口。  
 三类组件中 `invoke` 的输入输出关系如下：
@@ -37,7 +37,7 @@
 
 从而实现 **层层调用** 或 **一次性调用形成完整链路**。
 
-![alt text](image-77.png)
+![alt text](images/image-77.png)
 ---
 
 ## 三、链式调用 (Chain) 思想

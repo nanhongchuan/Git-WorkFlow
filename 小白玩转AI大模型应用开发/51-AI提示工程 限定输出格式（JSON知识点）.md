@@ -16,8 +16,8 @@
   - 新版模型已支持 JSON 模式，可保证输出为有效 JSON。
   - 对于不支持 JSON 模式的模型，仍需通过提示严格约束格式。
 
-![alt text](image-36.png)
-![alt text](image-37.png)
+![alt text](images/image-36.png)
+![alt text](images/image-37.png)
 
 ## 3. JSON 基础与规范要点
 - 定义：JSON（JavaScript Object Notation）与 JavaScript 语法相关的通用数据表示格式。
@@ -39,7 +39,7 @@
   - 对象（{...}）
   - 空值（null）
 
-![alt text](image-38.png)
+![alt text](images/image-38.png)
 
 ## 4. 在代码中解析 JSON（Python）
 - 可用标准库 json 将模型返回的 JSON 字符串转为 Python 数据结构：

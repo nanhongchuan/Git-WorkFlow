@@ -7,7 +7,7 @@
 *   **组件位置：** `LangChain Community` 的 `document_loaders` 模块下。
 *   **特点：** 支持多种类型的文档加载器，以适应不同来源和格式。
 
-![alt text](image-91.png)
+![alt text](images/image-91.png)
 
 #### 2. Document 类 (Document Class)
 
@@ -17,7 +17,7 @@
     *   `metadata`: 表示元数据的字典，例如来源文件名等信息。
 *   **加载器输出：** 大多数加载器的 `load()` 方法返回的结果是一个 `Document` 实例的列表。
 
- ![alt text](image-92.png)
+ ![alt text](images/image-92.png)
 
 #### 3. 常见文档加载器示例 (Common Document Loader Examples)
 
@@ -37,7 +37,7 @@
         ```
     3.  **结果：** 返回一个 `Document` 实例的列表。
 
-![alt text](image-93.png)
+![alt text](images/image-93.png)
   
 ##### 3.2. PyPDFLoader (PDF 文档加载器)
 
@@ -58,8 +58,8 @@
         ```
     4.  **结果：** 返回一个 `Document` 实例的列表。
 
-![alt text](image-94.png)
-![alt text](image-95.png)
+![alt text](images/image-94.png)
+![alt text](images/image-95.png)
 
 ##### 3.3. WikipediaLoader (维基百科加载器)
 
@@ -81,8 +81,8 @@
         ```
     4.  **结果：** 返回一个 `Document` 实例的列表，数量符合 `load_max_docs` 要求。
 
-![alt text](image-96.png)
-![  ](image-97.png)
+![alt text](images/image-96.png)
+![  ](images/image-97.png)
 
 #### 4. 其他支持类型与查询 (Other Supported Types & Where to Find More)
 

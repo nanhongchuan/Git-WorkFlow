@@ -4,7 +4,7 @@
 **Prompt（提示词）** 是用户给大语言模型的输入内容。  
 在网页端或 ChatGPT 聊天助手中，我们通常**手动构建提示词**，而使用代码可以实现更高的灵活性。
 
-![alt text](image-68.png)
+![alt text](images/image-68.png)
 
 通过在提示中插入**变量（variable）**，我们可以做到：
 - 动态调整提示内的示例或数据；
@@ -12,8 +12,8 @@
 - 提升提示构建的灵活性与效率。
 
 > 这一思想的核心是 **Prompt Template（提示模板）**。
-![alt text](image-69.png)
-![alt text](image-70.png)
+![alt text](images/image-69.png)
+![alt text](images/image-70.png)
 ---
 
 ## 二、三类 Prompt Template
@@ -26,7 +26,7 @@
 | 人类消息模板 | `HumanMessagePromptTemplate` | 定义用户角色提示 |
 | AI 消息模板 | `AIMessagePromptTemplate` | 定义模型角色提示 |
 
-![alt text](image-71.png)
+![alt text](images/image-71.png)
 
 ---
 
@@ -1011,7 +1011,7 @@ for input in input_variables: # 这一行是循环的开始
 
 ---
 
-![alt text](image-72.png)
+![alt text](images/image-72.png)
 
 1.  **为什么用元组？**
     *   `ChatPromptTemplate.from_messages` 这个函数**设计上就是期望接收 `(角色, 内容)` 这种形式的元组**。

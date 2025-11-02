@@ -6,7 +6,7 @@
 *   **向量数据库优势:** 使用“相似性搜索”，根据向量间的距离查找语音或语义上相似/相关的内容，即使关键词不完全匹配，也能理解意图。
 *   **类比:** 向量数据库被形象地比作AI模型的“海马体”，负责存储和检索记忆（信息）。
 
-![alt text](image-105.png)
+![alt text](images/image-105.png)
   
 **2. 结构化信息 vs. 非结构化信息**
 
@@ -19,15 +19,15 @@
     *   **示例:** 个人介绍、新闻文章、微博内容。
     *   **查询难点:** `擅长制定财务预算` (传统数据库无法匹配语义相似内容，如“预算控制和财务规划方面有丰富经验”)。
 
-![alt text](image-106.png)
-![alt text](image-107.png)
+![alt text](images/image-106.png)
+![alt text](images/image-107.png)
 
 **3. 常用向量数据库**
 
 *   多种选择，文中提及并以Faiss为例进行讲解。
 *   **示例:** Faiss, Chroma。
 
-![alt text](image-108.png)
+![alt text](images/image-108.png)
 
 **4. 使用Faiss储存向量 (实战步骤)**
 
@@ -62,12 +62,12 @@ db = FAISS.from_documents(texts, embeddings_model) # 将文本块转换为向量
 retriever = db.as_retriever() # 调用数据库中的as_retriever方法得到一个检索器retriever，它是从大量文本中检索相关信息的组件
 retrieved_docs = retriever.invoke("卢浮宫这个名字怎么来的？") # 返回到结果是一个由Document对象 组成的列表
 ```
-![alt text](image-109.png)
+![alt text](images/image-109.png)
  
 **6. 后续展望 (未完成部分)**
 
 *   将搜索出的相关文本片段与查询请求结合，一并传给AI模型以获得回答。
 *   可能需要结合提示模板和记忆功能（用于连续对话），但作者暗示或许有更简单的方法。
-![alt text](image-110.png)
+![alt text](images/image-110.png)
 
 ---

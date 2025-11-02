@@ -6,7 +6,7 @@
 *   **具体表现：** 无法将整篇超长文档（如一本书）一次性塞入AI的提示中，要求其根据内容作答。
 *   **解决方案：** 先将长文档分割成可管理的**文本块 (Text Chunks)**，然后只选择相关的文本块送给AI。
 
-![alt text](image-98.png)
+![alt text](images/image-98.png)
 
 #### 2. 什么是文本分割器 (Text Splitter)？
 
@@ -27,7 +27,7 @@
 from langchain_community.document_loaders import TextLoader
 from langchain_text_splitters import RecursiveCharacterTextSplitter
 ```
-![alt text](image-99.png)
+![alt text](images/image-99.png)
 
 ##### 3.1. 实例化参数
 
@@ -53,7 +53,7 @@ text_splitter = RecursiveCharacterTextSplitter(
 )
 ```
 
-![alt text](image-100.png)
+![alt text](images/image-100.png)
 
 ##### 3.2. 中文 `separators` 建议
 
@@ -93,7 +93,7 @@ text_splitter = RecursiveCharacterTextSplitter(
     # 此时，split_documents 中的每个 Document 的 page_content 都不超过 500 个字符
     ```
 
-![alt text](image-101.png)
+![alt text](images/image-101.png)
 
 #### 4. 下一步骤
 

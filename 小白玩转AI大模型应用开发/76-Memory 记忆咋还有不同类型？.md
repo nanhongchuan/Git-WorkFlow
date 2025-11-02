@@ -11,7 +11,7 @@
     *   随着对话轮数增加，历史消息列表越来越长，消耗的 token 越来越多。
     *   消息长度一旦达到模型上下文窗口的 token 上限，需要手动截断。
 
-![alt text](image-82.png)
+![alt text](images/image-82.png)
 
 ### 2. **Conversation Buffer Window Memory**
 *   **核心机制：** 储存记忆中最多 `k` 轮历史对话的数量。超出 `k` 轮的对话信息会被直接丢弃。
@@ -23,7 +23,7 @@
     *   当对话轮数超过 `k` 时，早期的信息会**直接丢失**。
     *   如果每条消息非常长，即使 `k` 值较大，仍可能达到窗口上限，需要适当减小 `k`。
 
-![alt text](image-83.png)
+![alt text](images/image-83.png)
 
 ### 3. **Conversation Summary Memory**
 *   **核心机制：** 不直接存储原始历史消息，而是对前面的对话内容进行**总结**，然后储存这个总结。
@@ -35,9 +35,9 @@
     *   总结过程中**有可能丢失一些细节**。
     *   总结任务本身需要消耗模型（`llm`）的计算资源和 **token**（特别是对话轮数不多时，总结可能比原始消息长）。
 
-![alt text](image-84.png)
-![alt text](image-85.png)
-![alt text](image-86.png)
+![alt text](images/image-84.png)
+![alt text](images/image-85.png)
+![alt text](images/image-86.png)
 
 ### 4. **Conversation Summary Buffer Memory**
 *   **核心机制：** 结合了 `Conversation Summary Memory` 和 `Conversation Buffer Memory`。在消息较少时原封不动存储原始内容；当消息变多达到指定 token 上限后，开始总结**更久远**的消息，而**最近的消息仍保持原始内容**。
@@ -50,8 +50,8 @@
 *   **缺点：**
     *   总结任务仍然需要消耗额外的 **token**。
 
-![alt text](image-87.png)
-![alt text](image-88.png)
+![alt text](images/image-87.png)
+![alt text](images/image-88.png)
 
 ### 5. **Conversation Token Buffer Memory**
 *   **核心机制：** 直接储存原始消息，并根据**已储存消息的 token 数**进行管理。如果 token 数超过上限，会丢弃前面的消息，直到不超过上限。与 `Conversation Buffer Window Memory` 相似，但它关注的是 token 数而非对话轮数。
@@ -60,7 +60,7 @@
 *   **缺点：**
     *   达到 token 上限后，会**直接丢弃前面的原始消息**。
 
-![alt text](image-89.png)
+![alt text](images/image-89.png)
 ---
 
 **总结：**

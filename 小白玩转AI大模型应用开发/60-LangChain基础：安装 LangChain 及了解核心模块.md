@@ -42,9 +42,9 @@
   - 基于大模型，能够执行一系列动作。
   - 核心理念：利用模型的推理能力，根据任务动态评估并确定行动路径。
 
-![alt text](image-60.png)
-![alt text](image-58.png)
-![alt text](image-59.png)
+![alt text](images/image-60.png)
+![alt text](images/image-58.png)
+![alt text](images/image-59.png)
 
 ## 四、学习指引
 - 在理解 LangChain 及其核心组件的基本概念后，即可开始系统学习与实践。

@@ -46,11 +46,11 @@
   - 编码器由多层堆叠而成（每层结构相同，但参数不共享），逐层抽象，提升对复杂文本的理解。
 
 
-![alt text](image-2.png) 
+![alt text](images/image-2.png) 
 
-![alt text](image-3.png)
+![alt text](images/image-3.png)
 
-![alt text](image-4.png)
+![alt text](images/image-4.png)
 
 ---
 

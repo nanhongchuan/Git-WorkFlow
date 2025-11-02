@@ -6,8 +6,8 @@
   2) 上下文窗口有限：外部知识量大（如 500 页文档）时，无法直接全部放入提示词中。大模型上下文窗口是有限的，超出上下文窗口内容就会被截断。
   3) 不擅长计算：模型是通过预测下一个 token 生成答案，可能给出错误的数值结果（如电商客服算错订单总额）。
 
-![alt text](image-44.png)
-![alt text](image-45.png)
+![alt text](images/image-44.png)
+![alt text](images/image-45.png)
  
 ## 朴素工程化应对（不用框架时的做法）
 - 为“无记忆”问题：手动维护历史消息列表，每次请求把历史对话拼接到提示词中。
@@ -19,14 +19,14 @@
   - 在外部真实执行这段代码，再把结果返回给用户。
 - 痛点：实现繁琐、样板代码和提示词重复度高，跨项目难复用。
 
-![alt text](image-46.png)
-![alt text](image-47.png)
-![alt text](image-48.png)
+![alt text](images/image-46.png)
+![alt text](images/image-47.png)
+![alt text](images/image-48.png)
 
 
 ## 为什么需要 LangChain
 
-![alt text](image-49.png)
+![alt text](images/image-49.png)
   
 - 目标：系统性减轻上述通用问题的实现负担，降低开发复杂度。
 - 定位：用于支持大语言模型应用开发的框架。
@@ -35,7 +35,7 @@
   - 连接外部数据源（长文档/知识库）；
   - 借助外部工具与环境进行互动（检索、执行代码、调用工具等），以生成更可靠的回答。
 
-![alt text](image-50.png)
+![alt text](images/image-50.png)
   
 ## LangChain 提供的组件与链（简化开发）
 - Memory（记忆）
@@ -62,9 +62,9 @@
   - 降低维护与升级成本；
   - 让应用对底层供应商差异更为“绝缘”。
 
-![alt text](image-51.png)
-![alt text](image-52.png) 
-![alt text](image-53.png)
+![alt text](images/image-51.png)
+![alt text](images/image-52.png) 
+![alt text](images/image-53.png)
  
 ## 小结
 - 直接用模型 API 构建应用会遇到记忆、上下文、计算等通用难题；

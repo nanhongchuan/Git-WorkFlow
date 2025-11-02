@@ -57,7 +57,7 @@
 - 删除当前单元格
 
 说明：不同主题/版本图标可能略有差异，但位置和功能基本一致。
-![alt text](image-5.png)
+![alt text](images/image-5.png)
 ## 4. 运行与快捷键（高频）
 
 - 运行当前单元格（代码或 Markdown）

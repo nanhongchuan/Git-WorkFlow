@@ -4,7 +4,7 @@
 
 详细介绍了在检索增强生成（RAG）中，将检索到的文档片段（documents）传递给大语言模型（LLM）的几种不同策略。这些策略主要用于解决检索片段过多或过长导致超出LLM上下文窗口限制的问题。
 
-![alt text](image-115.png)
+![alt text](images/image-115.png)
 
 #### **一、 共同背景：文档传递策略（Chain Types）**
 
@@ -35,7 +35,7 @@
         *   调用模型的次数较多（主要在 `map` 阶段），成本和时间开销增加。
     *   **适用场景：** 信息量大，需要整合多方面信息，且无法一次性塞给模型的情况。
 
-![alt text](image-116.png)
+![alt text](images/image-116.png)
  
 3.  **Refine (优化)**
     *   **原理：** 迭代优化回答。
@@ -48,7 +48,7 @@
         *   调用模型的次数较多，成本和时间开销增加。
     *   **适用场景：** 逐步积累信息，对回答质量和细节要求较高，且信息具有顺序或递进关系的情况。
 
-![alt text](image-117.png)
+![alt text](images/image-117.png)
 
 4.  **Map Rank (映射排序)**
     *   **原理：** 分为 `map` 和 `rank` 两个阶段。
@@ -62,8 +62,8 @@
         *   不适合需要融合广泛背景知识的查询（因为只选择一个最佳答案）。
     *   **适用场景：** 只需要一个最相关的答案，或者文档中存在明确的“黄金答案”的情况。
 
-![alt text](image-118.png)
-![ ](image-119.png)
+![alt text](images/image-118.png)
+![ ](images/image-119.png)
  
 #### **三、 如何在代码中选择策略**
 
@@ -79,8 +79,8 @@
     *   时间和价格成本。
     *   需要根据具体情况进行测试和选择。
 
-![alt text](image-120.png)
-![alt text](image-121.png)
+![alt text](images/image-120.png)
+![alt text](images/image-121.png)
 ---
 
 # 解释代码

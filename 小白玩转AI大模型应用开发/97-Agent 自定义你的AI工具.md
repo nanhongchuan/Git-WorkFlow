@@ -1,6 +1,6 @@
 # 97-Agent 自定义你的AI工具
 
-![alt text](image-127.png)
+![alt text](images/image-127.png)
  
 #### 1. Agent 核心概念
 
@@ -64,8 +64,8 @@ class TextLengthTool(BaseTool):
         return len(text)
 ```
 
-![alt text](image-128.png)
-![alt text](image-130.png)        
+![alt text](images/image-128.png)
+![alt text](images/image-130.png)        
 
 *   **3. 提示词 (Prompt)：**
     *   **作用：** 告知模型要遵循 ReAct 框架，并介绍可使用的工具。
@@ -81,7 +81,7 @@ class TextLengthTool(BaseTool):
 from langchain import hub
 prompt = hub.pull("hwchase17/structured-chat-agent")
 ```
-![alt text](image-131.png)  
+![alt text](images/image-131.png)  
 
 #### 4. Agent 的初始化与执行 (LangChain)
 

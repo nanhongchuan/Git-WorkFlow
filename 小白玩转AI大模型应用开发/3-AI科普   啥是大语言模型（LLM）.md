@@ -34,7 +34,7 @@
   - GPT-2：約 15 亿
   - GPT-3：約 1750 亿
 - 影响：参数规模增大，让模型从“专用器”转向“通用器”，不再局限于少数任务。
-![alt text](image.png)
+![alt text](images/image.png)
 ---
 
 ## 4. 从“单任务模型”到“一模多能”
@@ -49,7 +49,7 @@
   - 2018：OpenAI GPT-1；Google BERT
   - 2019：OpenAI GPT-2；（文中亦提及百度系模型等）
 - 公众认知拐点：ChatGPT 面向公众开放、对话式交互流畅，带动 LLM 破圈。
-![alt text](image-1.png)
+![alt text](images/image-1.png)
 ---
 
 ## 6. 了解 GPT 的名字：Generative Pre-trained Transformer

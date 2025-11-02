@@ -52,7 +52,7 @@
   - 响应头（Headers）
   - 响应内容（Body，包括 AI 回复和其他信息）
    
-![alt text](image-6.png)
+![alt text](images/image-6.png)
 ---
 
 ## 三、API 封装与库支持
@@ -67,7 +67,7 @@
   - `messages`: 聊天内容（消息列表）；
   - 以及控制回复的各种参数。
 
-![alt text](image-7.png)
+![alt text](images/image-7.png)
 ---
 
 ## 四、模型差异与调用方式

@@ -10,8 +10,8 @@
     *   在需要精确数字的场景（如网店客服计算订单总额）可能给出错误信息，造成风险。
 *   **总结：** LLM 不擅长作为计算器或执行精确的程序逻辑。
 
-![alt text](image-132.png)
-![alt text](image-133.png)
+![alt text](images/image-132.png)
+![alt text](images/image-133.png)
 
 #### **2. 解决方案：程序辅助语言模型 (Program-Aided Language Models, PAL)**
 
@@ -73,7 +73,7 @@
         *   初次运行时若代码出现缩进错误 (得益于 `handle_parsing_errors=True` 设置)，Agent 会观察报错信息。
         *   Agent 再次修改代码（纠正缩进），然后成功运行并给出正确答案。
 
-![alt text](image-134.png)
+![alt text](images/image-134.png)
 
 #### **6. 总结与应用场景**
 

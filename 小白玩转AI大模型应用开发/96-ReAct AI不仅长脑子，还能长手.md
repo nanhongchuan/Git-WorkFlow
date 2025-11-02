@@ -26,7 +26,7 @@
     *   借助**思维链 (Chain of Thought)**。
     *   通过**小样本提示 (Few-shot Prompting)**，向模型展示推理与行动结合的框架。
 
-![alt text](image-122.png) 
+![alt text](images/image-122.png) 
 
 
 #### **三、 ReAct核心流程：推理、行动、观察 (T-A-O)**
@@ -51,8 +51,8 @@
     8.  **推理3 (Thought)：** 已获得所需信息，下一步应该引用并提供答案。
     9.  **行动3 (Action)：** 总结查到的信息，告知用户最终答案。
 
-![alt text](image-123.png)
-![alt text](image-124.png)  
+![alt text](images/image-123.png)
+![alt text](images/image-124.png)  
  
 #### **五、 ReAct的应用与优势**
 
@@ -63,7 +63,7 @@
     *   **知识阶段：** 通过**观察**和**行动**步骤，增加与外部环境交互（如搜索引擎搜索、浏览网页），有效减少知识阶段带来的影响，回答实时信息。
     *   **信息可靠性：** 有利于用户对信息来源的可靠性和真实性进行验证（如AI聊天助手的网页浏览功能）。
 
-    ![alt text](image-125.png)
+    ![alt text](images/image-125.png)
 
 #### **六、 “行动 (Action)”的广义理解**
 
@@ -75,6 +75,6 @@
 
 **后续内容：** 下一视频将探讨如何将不同的工具集成供AI模型使用。
 
-![alt text](image-126.png)
+![alt text](images/image-126.png)
 
 ---

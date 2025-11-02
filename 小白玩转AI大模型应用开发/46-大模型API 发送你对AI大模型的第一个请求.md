@@ -114,7 +114,7 @@ response
 ```
 
 若直接查看，包含完整的响应结构。
-![alt text](image-13.png)
+![alt text](images/image-13.png)
 获取文本内容可直接访问：
 
 ```python

@@ -10,7 +10,7 @@
 - 常见 Chat Models：GPT-3.5-Turbo、GPT-4 等
 - 结论：在对话体验上，Chat Models 通常比纯 LLM 更合适
 
-![alt text](image-66.png)
+![alt text](images/image-66.png)
 
 
 ## 2. 在 LangChain 中使用聊天模型（以 OpenAI 为例）
@@ -79,7 +79,7 @@ print(ai_msg.content)  # 模型的回答文本
 ```
 > **`invoke` 的作用是向模型发送消息并获取模型的响应。可以理解为“执行一次对话请求”**
 
-![alt text](image-67.png)
+![alt text](images/image-67.png)
 
 ## 4. 除 OpenAI 外的其他聊天模型（LangChain 集成）
 - `langchain-community` 库集成了多家提供商的聊天模型：

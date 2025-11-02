@@ -2,9 +2,9 @@
 
 #### **一、核心概念：什么是“嵌入 (Embedding)”？**
 
-![alt text](image-102.png)
-![alt text](image-103.png)
-![alt text](image-104.png)
+![alt text](images/image-102.png)
+![alt text](images/image-103.png)
+![alt text](images/image-104.png)
 *   **定义：** 将文本块（或字符串）转换成**向量 (Vector)** 的过程，称为**嵌入 (Embedding)**。
 *   **目的：** 嵌入向量需要包含文本之间的**语法、语义**等关系。
 *   **特性：**
