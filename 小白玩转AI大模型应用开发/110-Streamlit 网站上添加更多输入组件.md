@@ -143,3 +143,11 @@
     ```
 
 ---
+
+| 组件函数 (Function)                 | 用途 (Purpose)                                | 主要特性 (Key Features)                                         | 返回值类型 (Return Type)             |
+| :---------------------------------- | :-------------------------------------------- | :-------------------------------------------------------------- | :----------------------------------- |
+| `st.radio(label, options, ...)`     | 从多个互斥选项中选择一个                      | 以单选按钮形式展示；可设置 `options` 和 `index` (默认选中项)    | `str` (所选选项的值)                 |
+| `st.selectbox(label, options, ...)` | 从下拉列表中选择一个选项 (适用于选项较多)     | 以下拉框形式展示；可设置 `options` 和 `index` (默认选中项)    | `str` (所选选项的值)                 |
+| `st.multiselect(label, options, ...)` | 从多个选项中选择零个、一个或多个             | 以下拉列表+勾选框形式展示；可设置 `options` 和 `default` (默认选中项列表) | `list` of `str` (所有选中的选项列表) |
+| `st.slider(label, min, max, ...)`   | 通过拖动滑块选择一个数值或数值范围           | 交互式滑块；可设置 `min_value`, `max_value`, `value` (单值或元组表示范围), `step` | `int` 或 `float` (单值)；<br>`tuple` of `(int, int)` 或 `(float, float)` (范围) |
+| `st.file_uploader(label, type=None)` | 允许用户上传文件                             | 提供文件选择和上传功能；可限制 `type` (允许的文件扩展名列表)    | `streamlit.UploadedFile` 对象 (已上传文件) 或 `None` (未上传) |
