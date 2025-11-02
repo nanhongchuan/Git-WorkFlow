@@ -112,7 +112,7 @@ git rebase -i <commit-id>
 * `squash`：合并进上一个提交。
 * 其他选项：`edit`、`drop`、`reset`、`merge`。
 * 点击 `i` 键进入编辑模式
-  ![](imges/image.png)
+  ![](../imges/image.png)
 
 3. 至少保留一个 `pick`，其他可以 `squash`。
 

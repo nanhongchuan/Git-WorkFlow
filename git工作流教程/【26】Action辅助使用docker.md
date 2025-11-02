@@ -36,7 +36,7 @@
 * **Linux 配置**: 修改配置文件 `/etc/docker/daemon.json`，添加镜像源配置，然后执行 `systemctl restart docker` 重启服务。
 * **项目地址**:`https://github.com/tech-shrimp/docker_installer`
 * **Windows/Mac 配置**: 在 Docker Desktop 的 **Settings -> Docker Engine** 中，修改 JSON 配置文件，添加镜像源配置，然后点击 **Apply and Restart**。
-![](imges/imagecopy.png)
+![](../imges/imagecopy.png)
 
 #### 方案三：使用 GitHub Action 下载离线镜像
 

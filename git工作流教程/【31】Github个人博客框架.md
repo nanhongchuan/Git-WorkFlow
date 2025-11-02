@@ -81,12 +81,12 @@
 
    * 打开 **Actions → Build Gmeek→ Run workflow**。
    * 执行后页面自动更新。
-![](imges/imagecopy2.png)
+![](../imges/imagecopy2.png)
 ---
 
 ## 🌐 六、自定义域名配置
 
-![](imges/imagecopy3.png)
+![](../imges/imagecopy3.png)
 1. 打开仓库 → **Settings → Pages**。
 2. 在「Custom domain」填写自定义域名，例如：
 
@@ -103,7 +103,7 @@
      目标：yourname.github.io
      ```
    * 关闭 GitHub Pages 的 HTTPS（Cloudflare 已自带）。
-   ![](imges/imagecopy4.png)
+   ![](../imges/imagecopy4.png)
    * 保存并等待解析生效。
 4. 配置域名可以参考：`https://www.bilibili.com/video/BV1Mz421e76M/`
 ---
