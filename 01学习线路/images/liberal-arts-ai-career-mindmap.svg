@@ -1,0 +1,103 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="1120" viewBox="0 0 1600 1120">
+  <defs>
+    <style>
+      .bg { fill: #fbfaf6; }
+      .title { font: 700 46px -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", sans-serif; fill: #202124; }
+      .subtitle { font: 400 22px -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", sans-serif; fill: #5f6368; }
+      .node-title { font: 700 27px -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", sans-serif; fill: #202124; }
+      .node-text { font: 400 21px -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", sans-serif; fill: #3c4043; }
+      .small { font: 400 18px -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", sans-serif; fill: #3c4043; }
+      .tag { font: 700 18px -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", sans-serif; fill: #ffffff; }
+      .box { stroke-width: 3; rx: 22; ry: 22; }
+      .line { fill: none; stroke: #6f7782; stroke-width: 3; stroke-linecap: round; stroke-linejoin: round; }
+      .arrow { fill: #6f7782; }
+      .muted { fill: #eef1f5; stroke: #c8d0da; }
+    </style>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="9" markerHeight="9" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" class="arrow"/>
+    </marker>
+    <filter id="shadow" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="8" stdDeviation="10" flood-color="#000000" flood-opacity="0.10"/>
+    </filter>
+  </defs>
+
+  <rect class="bg" width="1600" height="1120"/>
+
+  <text x="800" y="86" text-anchor="middle" class="title">文科生转行 AI：岗位倒推学习法</text>
+  <text x="800" y="122" text-anchor="middle" class="subtitle">先选目标岗位，再判断技术边界，用小产品把概念变成作品</text>
+
+  <rect x="555" y="180" width="490" height="150" fill="#1f6feb" stroke="#1557b0" class="box" filter="url(#shadow)"/>
+  <text x="800" y="237" text-anchor="middle" font-size="34" font-weight="700" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif" fill="#ffffff">核心判断</text>
+  <text x="800" y="278" text-anchor="middle" font-size="24" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif" fill="#ffffff">不要先盲学 Python / 算法</text>
+  <text x="800" y="312" text-anchor="middle" font-size="24" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif" fill="#ffffff">要从岗位需求反推学习重点</text>
+
+  <path d="M555 255 C435 255 380 220 300 220" class="line" marker-end="url(#arrow)"/>
+  <path d="M1045 255 C1165 255 1220 220 1300 220" class="line" marker-end="url(#arrow)"/>
+  <path d="M625 330 C525 420 470 470 360 515" class="line" marker-end="url(#arrow)"/>
+  <path d="M975 330 C1075 420 1130 470 1240 515" class="line" marker-end="url(#arrow)"/>
+  <path d="M800 330 C800 360 800 370 800 390" class="line" marker-end="url(#arrow)"/>
+
+  <rect x="70" y="165" width="460" height="205" fill="#fff4e5" stroke="#f4b55f" class="box"/>
+  <text x="100" y="215" class="node-title">1. 岗位地图</text>
+  <text x="110" y="258" class="node-text">技术要求从高到低：</text>
+  <text x="110" y="292" class="node-text">AI 产品经理 → AI 训练师 / 数据标注</text>
+  <text x="110" y="326" class="node-text">AI 内容 / 用户运营 → AI 解决方案 / 售前</text>
+  <text x="110" y="354" class="small">重点：先判断自己更适合哪条线。</text>
+
+  <rect x="1070" y="165" width="460" height="205" fill="#eaf4ff" stroke="#67a6e8" class="box"/>
+  <text x="1100" y="215" class="node-title">2. 主攻方向</text>
+  <text x="1110" y="258" class="node-text">AI 产品经理更有成长空间。</text>
+  <text x="1110" y="292" class="node-text">模型侧：懂模型链路、数据集、评测、标注。</text>
+  <text x="1110" y="326" class="node-text">应用侧：把大模型接入业务场景。</text>
+  <text x="1110" y="354" class="small">文科生优先切应用侧，更接近传统产品升级。</text>
+
+  <rect x="70" y="470" width="520" height="245" fill="#eef8ed" stroke="#78b66d" class="box"/>
+  <text x="100" y="520" class="node-title">3. 应用侧能力结构</text>
+  <rect x="105" y="550" width="120" height="34" rx="17" fill="#3f8f46"/>
+  <text x="165" y="573" text-anchor="middle" class="tag">已有优势</text>
+  <text x="250" y="575" class="node-text">用户理解、表达沟通、内容判断、审美、产品感</text>
+  <rect x="105" y="612" width="120" height="34" rx="17" fill="#1b72b8"/>
+  <text x="165" y="635" text-anchor="middle" class="tag">补齐短板</text>
+  <text x="250" y="637" class="node-text">软件工程流程、前端、后端、数据库、API</text>
+  <text x="250" y="676" class="node-text">Prompt、Agent、RAG、Token、多模态、模型调用</text>
+
+  <rect x="1010" y="470" width="520" height="245" fill="#fff0f3" stroke="#df7b91" class="box"/>
+  <text x="1040" y="520" class="node-title">4. 最有效学习法：做一个小 APP</text>
+  <text x="1050" y="565" class="node-text">用 Vibe Coding 练习提需求、拆功能、调试结果。</text>
+  <text x="1050" y="604" class="node-text">案例：催眠 APP，播放高数 / 算法 / 物理课程音频。</text>
+  <text x="1050" y="643" class="node-text">价值：理解完整应用协作，沉淀简历作品。</text>
+  <text x="1050" y="682" class="node-text">工具：Chatbox 可按任务切换模型。</text>
+
+  <rect x="545" y="385" width="510" height="120" fill="#f4efff" stroke="#9b7adb" class="box"/>
+  <text x="575" y="432" class="node-title">5. 技术只学到“能协作”的程度</text>
+  <text x="595" y="472" class="node-text">能听懂、能沟通、能判断方案可行性。</text>
+
+  <path d="M800 505 L800 805" class="line" marker-end="url(#arrow)"/>
+  <rect x="95" y="815" width="1410" height="205" fill="#ffffff" stroke="#d7dbe2" class="box" filter="url(#shadow)"/>
+  <text x="125" y="865" class="node-title">一次按钮点击背后的数据流转</text>
+  <text x="125" y="904" class="small">用户点“高数课”后，产品经理需要理解请求如何从界面走到数据，再返回播放结果。</text>
+
+  <g transform="translate(130 935)">
+    <rect x="0" y="0" width="170" height="58" rx="16" fill="#e8f0fe" stroke="#80a7f7" stroke-width="3"/>
+    <text x="85" y="37" text-anchor="middle" class="node-text">用户点击</text>
+    <path d="M175 29 L245 29" class="line" marker-end="url(#arrow)"/>
+
+    <rect x="255" y="0" width="190" height="58" rx="16" fill="#e6f4ea" stroke="#73b983" stroke-width="3"/>
+    <text x="350" y="37" text-anchor="middle" class="node-text">前端发请求</text>
+    <path d="M450 29 L520 29" class="line" marker-end="url(#arrow)"/>
+
+    <rect x="530" y="0" width="205" height="58" rx="16" fill="#fff7e0" stroke="#f1bf51" stroke-width="3"/>
+    <text x="632" y="37" text-anchor="middle" class="node-text">后端处理逻辑</text>
+    <path d="M740 29 L810 29" class="line" marker-end="url(#arrow)"/>
+
+    <rect x="820" y="0" width="190" height="58" rx="16" fill="#fce8e6" stroke="#e07b72" stroke-width="3"/>
+    <text x="915" y="37" text-anchor="middle" class="node-text">数据库查询</text>
+    <path d="M1015 29 L1085 29" class="line" marker-end="url(#arrow)"/>
+
+    <rect x="1095" y="0" width="200" height="58" rx="16" fill="#f3e8fd" stroke="#b081d9" stroke-width="3"/>
+    <text x="1195" y="37" text-anchor="middle" class="node-text">返回并播放</text>
+  </g>
+
+  <rect x="95" y="1040" width="1410" height="42" rx="21" fill="#202124"/>
+  <text x="800" y="1068" text-anchor="middle" font-size="20" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif" fill="#ffffff">结论：技术学习不是越多越好，而是服务于目标岗位、真实项目和面试表达。</text>
+</svg>
