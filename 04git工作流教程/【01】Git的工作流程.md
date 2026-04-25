@@ -20,6 +20,122 @@
 
 ---
 
+## 第一张图的补充：哪些命令还推荐这样记？
+
+这类 Git 常用命令大部分没有过时，但有几处对新手来说需要记得更严谨一点。
+
+### 1. `git checkout` 不要写成 `git check out`
+
+正确命令是：
+
+```bash
+git checkout 分支名
+```
+
+中间没有空格。不过现在更推荐新手优先记：
+
+```bash
+git switch 分支名
+```
+
+原因是 `checkout` 以前既能切换分支，又能恢复文件，功能比较杂；`switch` 专门用于切换分支，更直观。
+
+### 2. `git branch 新分支名` 只创建分支，不会自动切过去
+
+```bash
+git branch dev
+```
+
+这条命令只是创建 `dev` 分支，你当前还停留在原来的分支上。
+
+如果想“创建并切换到新分支”，现在推荐：
+
+```bash
+git switch -c dev
+```
+
+老写法是：
+
+```bash
+git checkout -b dev
+```
+
+### 3. `git pull` 不是单纯“下载远程内容”
+
+`git pull` 更准确地说等于：
+
+```bash
+git fetch
+git merge
+```
+
+也就是先拉取远程更新，再尝试合并到你当前分支。所以 `git pull` 有时会出现冲突，它不是单纯下载文件。
+
+更稳的理解是：
+
+```bash
+git fetch
+```
+
+先看看远程有什么变化；
+
+```bash
+git pull
+```
+
+再把远程变化合并进来。
+
+### 4. `git merge 分支名` 仍然常用
+
+例如你在 `main` 分支，想把 `dev` 分支合进来：
+
+```bash
+git switch main
+git merge dev
+```
+
+这没有过时。团队里也常用 `git rebase` 整理提交历史，但新手先学 `merge` 完全可以。
+
+### 5. 日常最高频的三条命令不能漏
+
+```bash
+git add .
+```
+
+把修改加入暂存区。
+
+```bash
+git commit -m "说明"
+```
+
+提交一次版本记录。
+
+```bash
+git push
+```
+
+把本地提交推送到远程仓库。
+
+更适合新手先记的版本：
+
+```bash
+git clone 仓库地址        # 下载项目
+git status              # 查看当前状态
+git add .               # 添加修改
+git commit -m "说明"     # 提交修改
+git push                # 推到远程
+git pull                # 拉取远程更新并合并
+git log                 # 查看提交历史
+git diff                # 查看具体改动
+git switch 分支名        # 切换分支
+git switch -c 新分支名    # 创建并切换分支
+git merge 分支名         # 合并分支
+```
+
+一句话总结：这些命令大部分没过时，但 `checkout` 对新手来说不推荐优先记，现在更推荐用 `switch`；另外 `add / commit / push` 才是 Git 日常操作的核心三件套。
+
+---
+
 # 【第二张图】变更分支与冲突处理
 
 ![](../imges/img_v3_02qh_40fe8878-c57f-4b99-8653-f8a0d3103f5g.png)
@@ -94,10 +210,10 @@ git commit -m "正确的提交信息"
 git stash
 
 # 切换分支
-git checkout other-branch
+git switch other-branch
 
 # 切换回来
-git checkout main
+git switch main
 
 # 恢复修改
 git stash pop
@@ -394,7 +510,7 @@ git pull --rebase origin main
 * 在本地做一个功能改进，**建议新建分支**：
 
   ```bash
-  git checkout -b feat/xxx
+  git switch -c feat/xxx
   # 做改动 → commit → push origin feat/xxx
   # 在 GitHub 上发 Pull Request 合并到 main（减少与他人直接在 main 冲突）
   ```
@@ -439,9 +555,8 @@ git merge origin/main
 git push origin main
 
 # 创建并切换分支
-git checkout -b feat/xxx
-# 或者新语法
 git switch -c feat/xxx
+# 老写法：git checkout -b feat/xxx
 
 # 临时保存未提交改动
 git stash
@@ -764,7 +879,8 @@ git commit -m "移动文件到docs目录"
 
 ```bash
 # 撤销删除（恢复文件）
-git checkout HEAD -- filename.txt
+git restore filename.txt
+# 老写法：git checkout HEAD -- filename.txt
 
 # 撤销重命名
 git mv newname.txt oldname.txt
@@ -778,6 +894,6 @@ git mv newfolder/file.txt file.txt
 1. **使用 `git mv` 和 `git rm`**：Git会自动处理删除和移动操作
 2. **提交变更**：所有操作都需要 `git commit` 才能保存
 3. **查看状态**：操作前后用 `git status` 检查状态
-4. **撤销操作**：可以用 `git checkout` 恢复文件
+4. **撤销操作**：可以用 `git restore` 恢复文件，老教程里常见 `git checkout` 写法
 
 **记忆口诀**：删除用`rm`，移动用`mv`，操作后要`commit`！
