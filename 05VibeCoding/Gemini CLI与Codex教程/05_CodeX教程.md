@@ -1,5 +1,7 @@
 # Codex 详细攻略 知识点笔记
 
+**其余课程地址**：[https://www.yuque.com/haixiong1997/icg1fy/otr3wme1ml3ow3oq?singleDoc=](https://www.yuque.com/haixiong1997/icg1fy/otr3wme1ml3ow3oq?singleDoc=)
+
 ## 概览
 
 * Codex 已成为当前热门的 AI 编程工具（超越 Cloud Code）。
